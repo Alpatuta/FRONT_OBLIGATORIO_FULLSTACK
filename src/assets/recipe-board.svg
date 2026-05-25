@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+  <title id="title">Mesa de cocina con recetas</title>
+  <desc id="desc">Ilustracion editorial de platos frescos, hierbas y una libreta de recetas.</desc>
+  <rect width="1200" height="800" fill="#f4efe7"/>
+  <rect x="68" y="70" width="1064" height="660" rx="32" fill="#fffaf2"/>
+  <circle cx="274" cy="268" r="148" fill="#e6503f"/>
+  <circle cx="274" cy="268" r="116" fill="#fff4df"/>
+  <circle cx="274" cy="268" r="78" fill="#f7b955"/>
+  <path d="M222 253c40-42 100-42 142 0-15 39-103 42-142 0z" fill="#2f7b57"/>
+  <circle cx="245" cy="244" r="12" fill="#f8fbf4"/>
+  <circle cx="302" cy="239" r="10" fill="#f8fbf4"/>
+  <circle cx="332" cy="277" r="11" fill="#f8fbf4"/>
+  <rect x="502" y="145" width="366" height="484" rx="18" fill="#ffffff" stroke="#dccbb5" stroke-width="4"/>
+  <rect x="548" y="202" width="274" height="20" rx="10" fill="#2f7b57"/>
+  <rect x="548" y="260" width="220" height="12" rx="6" fill="#c6a06a"/>
+  <rect x="548" y="294" width="248" height="12" rx="6" fill="#c6a06a"/>
+  <rect x="548" y="328" width="178" height="12" rx="6" fill="#c6a06a"/>
+  <rect x="548" y="408" width="274" height="16" rx="8" fill="#e6503f"/>
+  <rect x="548" y="456" width="230" height="12" rx="6" fill="#c6a06a"/>
+  <rect x="548" y="490" width="254" height="12" rx="6" fill="#c6a06a"/>
+  <rect x="548" y="524" width="204" height="12" rx="6" fill="#c6a06a"/>
+  <path d="M906 262c74-38 148 4 156 72 7 66-43 126-112 122-70-4-118-82-84-146 9-18 22-34 40-48z" fill="#2f7b57"/>
+  <path d="M931 309c36-23 82-5 93 34 13 47-24 89-70 83-43-5-66-59-41-94 5-9 11-16 18-23z" fill="#f8fbf4"/>
+  <path d="M142 584c78-24 148-20 208 12 34 18 61 41 88 76H132c-26-30-22-70 10-88z" fill="#2f7b57"/>
+  <path d="M158 605c60-17 116-13 166 10 26 12 49 29 68 51H160c-19-19-21-46-2-61z" fill="#f7b955"/>
+  <path d="M860 596c70-28 154-7 202 53 18 22 7 55-22 62H823c-38-7-49-58-18-82 16-13 34-24 55-33z" fill="#e6503f"/>
+  <path d="M902 618c42-12 91 2 121 34 11 12 5 31-12 34H874c-24-4-31-32-11-47 12-9 25-16 39-21z" fill="#fff4df"/>
+</svg>
