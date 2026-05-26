@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import HeaderSidebar from "./HeaderSidebar";
 import NavbarSidebar from "./NavbarSidebar";
 
@@ -6,9 +7,9 @@ const Sidebar = () => {
     <aside className="sidebar">
       <HeaderSidebar />
       <NavbarSidebar />
-      <a className="button button-ghost logout-link" href="#login">
+      <Link className="button button-ghost logout-link" to="/login">
         Cerrar sesion
-      </a>
+      </Link>
     </aside>
   );
 };
