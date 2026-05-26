@@ -37,17 +37,18 @@ body {
 }
 
 .screen {
-  display: none;
   min-height: 100vh;
 }
 
-#login {
+.screen-auth {
   display: grid;
+  padding: 28px;
+  background: #efe5d4;
 }
 
-#registro:target,
-#dashboard:target {
+.screen-dashboard {
   display: grid;
+  background: var(--linen);
 }
 
 body:has(#registro:target) #login,
