@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import FormularioLogin from "./FormularioLogin";
 import HeaderLogin from "./HeaderLogin";
 
@@ -9,7 +10,7 @@ const AuthCardLogin = () => {
 
       <p className="auth-switch">
         No tienes cuenta?
-        <a href="#registro">Crear cuenta</a>
+        <Link to="/registro">Crear cuenta</Link>
       </p>
     </section>
   );

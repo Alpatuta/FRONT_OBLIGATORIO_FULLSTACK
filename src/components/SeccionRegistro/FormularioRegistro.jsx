@@ -1,3 +1,5 @@
+import { Link } from "react-router";
+
 const FormularioRegistro = () => {
   return (
     <>
@@ -38,12 +40,12 @@ const FormularioRegistro = () => {
           El boton de registro permanecera deshabilitado si algun dato no es
           valido.
         </p>
-        <a
+        <Link
           className="button button-primary form-message-wide"
-          href="#dashboard"
+          to="/dashboard"
         >
           Registrarme
-        </a>
+        </Link>
       </form>
     </>
   );

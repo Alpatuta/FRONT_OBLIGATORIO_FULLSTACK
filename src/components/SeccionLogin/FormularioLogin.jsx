@@ -1,3 +1,5 @@
+import { Link } from "react-router";
+
 const FormularioLogin = () => {
   return (
     <>
@@ -21,9 +23,9 @@ const FormularioLogin = () => {
         <p className="form-message">
           El boton se habilitara cuando ambos campos sean validos.
         </p>
-        <a className="button button-primary" href="#dashboard">
+        <Link className="button button-primary" to="/dashboard">
           Ingresar
-        </a>
+        </Link>
       </form>
     </>
   );

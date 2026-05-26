@@ -1,20 +1,24 @@
 import { useState } from "react";
 import "./styles.css";
-import Login from "./components/SeccionLogin/Login";
-import Registro from "./components/SeccionRegistro/Registro";
-import Dashboard from "./components/SeccionDashboard.jsx/Dashboard";
+import LoginPage from "./pages/LoginPage";
+import RegistroPage from "./pages/RegistroPage";
+import DashboardPage from "./pages/DashboardPage";
+import { BrowserRouter, Routes, Route } from "react-router";
+import ContainerPage from "./pages/ContainerPage";
 
 function App() {
   const [count, setCount] = useState(0);
 
   return (
-    <div className="spa-root">
-      <main className="spa-stage">
-        <Login />
-        <Registro />
-        <Dashboard />
-      </main>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<ContainerPage />}>
+          <Route index element={<LoginPage />} />
+          <Route path="registro" element={<RegistroPage />} />
+          <Route path="dashboard" element={<DashboardPage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 

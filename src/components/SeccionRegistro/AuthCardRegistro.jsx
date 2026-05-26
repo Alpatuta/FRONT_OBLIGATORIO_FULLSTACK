@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import FormularioRegistro from "./FormularioRegistro";
 import HeaderRegistro from "./HeaderRegistro";
 
@@ -8,7 +9,7 @@ const AuthCardRegistro = () => {
       <FormularioRegistro />
       <p className="auth-switch">
         Ya tienes cuenta?
-        <a href="#login">Ingresar</a>
+        <Link to="/login">Ingresar</Link>
       </p>
     </section>
   );
