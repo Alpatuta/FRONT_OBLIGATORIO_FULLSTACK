@@ -7,7 +7,7 @@ const Sidebar = () => {
     <aside className="sidebar">
       <HeaderSidebar />
       <NavbarSidebar />
-      <Link className="button button-ghost logout-link" to="/login">
+      <Link className="button button-ghost logout-link" to="/">
         Cerrar sesion
       </Link>
     </aside>

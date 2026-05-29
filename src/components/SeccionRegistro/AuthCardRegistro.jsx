@@ -9,7 +9,7 @@ const AuthCardRegistro = () => {
       <FormularioRegistro />
       <p className="auth-switch">
         Ya tienes cuenta?
-        <Link to="/login">Ingresar</Link>
+        <Link to="/">Ingresar</Link>
       </p>
     </section>
   );
