@@ -7,9 +7,8 @@ const AuthCardRegistro = () => {
     <section className="auth-card">
       <HeaderRegistro />
       <FormularioRegistro />
-      <p className="auth-switch">
-        Ya tienes cuenta?
-        <Link to="/">Ingresar</Link>
+      <p className="auth-footer">
+        ¿Ya tenés cuenta? <Link to="/">Ingresar</Link>
       </p>
     </section>
   );
