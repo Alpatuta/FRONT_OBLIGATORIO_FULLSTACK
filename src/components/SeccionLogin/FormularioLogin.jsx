@@ -29,8 +29,13 @@ const FormularioLogin = () => {
       localStorage.setItem("user", JSON.stringify(response.data.correo));
       navigate("/dashboard");
     } catch (error) {
-      toast.error("Error al iniciar sesión: " + error.data.message);
-      console.error("Error al iniciar sesión:", error.data.message);
+      const mensaje =
+        error.response?.data?.message ||
+        error.response?.data?.error ||
+        "Error desconocido";
+
+      toast.error(`Error al iniciar sesión: ${mensaje}`);
+      console.error(mensaje);
     }
   };
   return (
@@ -42,7 +47,7 @@ const FormularioLogin = () => {
             id="login-correo"
             type="email"
             placeholder="usuario@mail.com"
-            {...register("correo")}
+            {...register("email")}
           />
         </div>
         <div className="field">
@@ -51,7 +56,7 @@ const FormularioLogin = () => {
             id="login-contrasenia"
             type="password"
             placeholder="Password1"
-            {...register("contrasenia")}
+            {...register("password")}
           />
         </div>
         <p className="form-message">

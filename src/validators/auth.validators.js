@@ -8,7 +8,7 @@ export const registerSchema = joi.object({
         'string.max': 'El nombre no puede tener más de 100 caracteres',
         'any.required': 'El nombre es obligatorio',
     }),
-    contrasenia: joi.string().min(6).max(100).pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/).required().messages({
+    password: joi.string().min(6).max(100).pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/).required().messages({
         'string.base': 'La contraseña debe ser una cadena de texto',
         'string.empty': 'La contraseña no puede estar vacía',
         'string.min': 'La contraseña debe tener al menos 6 caracteres',
@@ -25,7 +25,7 @@ export const registerSchema = joi.object({
         'any.only': 'Las contraseñas deben coincidir',
         'any.required': 'La confirmación de contraseña es obligatoria',
     }),
-    correo: joi.string().email().required().messages({
+    email: joi.string().email().required().messages({
         'string.base': 'El correo debe ser una cadena de texto',
         'string.empty': 'El correo no puede estar vacío',
         'string.email': 'El correo debe tener un formato válido',
@@ -38,11 +38,11 @@ export const registerSchema = joi.object({
 });
 
 export const loginSchema = joi.object({
-    correo: joi.string().email().required().messages({
+    email: joi.string().email().required().messages({
         'string.empty': 'El correo no puede estar vacío',
         'any.required': 'El correo es obligatorio',
     }),
-    contrasenia: joi.string().min(6).max(100).required().messages({
+    password: joi.string().min(6).max(100).required().messages({
         'string.empty': 'La contraseña no puede estar vacía',
         'any.required': 'La contraseña es obligatoria',
     }),
