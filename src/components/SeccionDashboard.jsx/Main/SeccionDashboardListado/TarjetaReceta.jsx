@@ -2,7 +2,7 @@ const TarjetaReceta = () => {
   return (
     <article className="recipe-row">
       <img
-        src="../../../../../resources/assets/recipe-board.svg"
+        src="../../../../../src/assets/recipe-board.svg"
         alt="Miniatura de receta vegetariana"
       />
       <div>
