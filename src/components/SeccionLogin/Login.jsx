@@ -3,11 +3,7 @@ import AuthVisual from "./AuthVisual";
 
 const Login = () => {
   return (
-    <section
-      id="login"
-      className="screen screen-auth"
-      aria-labelledby="login-title"
-    >
+    <section className="screen screen-auth" aria-labelledby="login-title">
       <div className="auth-shell">
         <AuthVisual />
         <AuthCardLogin />

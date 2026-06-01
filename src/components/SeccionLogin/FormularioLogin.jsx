@@ -12,9 +12,10 @@ const FormularioLogin = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm({
     resolver: joiResolver(loginSchema),
+    mode: "onChange",
   });
 
   const procesarLogin = async (data) => {
@@ -25,7 +26,6 @@ const FormularioLogin = () => {
       );
 
       localStorage.setItem("token", response.data.token);
-      //Almacenar el email del usuario en el localStorage para su uso posterior
       localStorage.setItem("user", JSON.stringify(response.data.correo));
       navigate("/dashboard");
     } catch (error) {
@@ -39,34 +39,44 @@ const FormularioLogin = () => {
     }
   };
   return (
-    <>
-      <form className="form" onSubmit={handleSubmit(procesarLogin)}>
-        <div className="field">
-          <label htmlFor="login-correo">Correo</label>
-          <input
-            id="login-correo"
-            type="email"
-            placeholder="usuario@mail.com"
-            {...register("correo")}
-          />
-        </div>
-        <div className="field">
-          <label htmlFor="login-contrasenia">Contrasena</label>
-          <input
-            id="login-contrasenia"
-            type="password"
-            placeholder="Password1"
-            {...register("contrasenia")}
-          />
-        </div>
-        <p className="form-message">
-          El boton se habilitara cuando ambos campos sean validos.
-        </p>
-        <button className="button button-primary" type="submit">
-          Ingresar
-        </button>
-      </form>
-    </>
+    <form className="form" onSubmit={handleSubmit(procesarLogin)}>
+      <div className="field">
+        <label htmlFor="login-correo">Correo electrónico</label>
+        <input
+          id="login-correo"
+          type="email"
+          placeholder="usuario@mail.com"
+          autoComplete="email"
+          required
+          {...register("correo")}
+        />
+      </div>
+
+      <div className="field">
+        <label htmlFor="login-contrasenia">Contraseña</label>
+        <input
+          id="login-contrasenia"
+          type="password"
+          placeholder="••••••••"
+          autoComplete="current-password"
+          required
+          {...register("contrasenia")}
+        />
+      </div>
+
+      <div className="alert alert-info" style={{ fontSize: "13px" }}>
+        El botón se habilitará cuando ambos campos sean válidos.
+      </div>
+
+      <button
+        type="submit"
+        className="btn btn-primary btn-lg btn-full"
+        style={{ marginTop: "4px" }}
+        disabled={!isValid}
+      >
+        Ingresar
+      </button>
+    </form>
   );
 };
 

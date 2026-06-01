@@ -7,10 +7,8 @@ const AuthCardLogin = () => {
     <section className="auth-card">
       <HeaderLogin />
       <FormularioLogin />
-
-      <p className="auth-switch">
-        No tienes cuenta?
-        <Link to="/registro">Crear cuenta</Link>
+      <p className="auth-footer">
+        ¿No tenés cuenta? <Link to="/registro">Crear cuenta gratis</Link>
       </p>
     </section>
   );
