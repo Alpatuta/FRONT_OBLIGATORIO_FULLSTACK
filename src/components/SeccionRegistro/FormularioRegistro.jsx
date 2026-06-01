@@ -1,17 +1,49 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { useForm } from "react-hook-form";
+import Joi from "joi";
+import { joiResolver } from "@hookform/resolvers/joi";
+import { registerSchema } from "../../validators/auth.validators";
+import { Link, useNavigate } from "react-router";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 const FormularioRegistro = () => {
-  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setTimeout(() => setLoading(false), 1500);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm({
+    resolver: joiResolver(registerSchema),
+    mode: "onChange",
+  });
+
+  const procesarRegistro = async (data) => {
+    try {
+      const response = await axios.post(
+        "https://obligatorio-fullstack-six.vercel.app/V1/auth/register",
+        data,
+      );
+
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("user", JSON.stringify(response.data.correo));
+      navigate("/dashboard");
+    } catch (error) {
+      const mensaje =
+        error.response?.data?.message ||
+        error.response?.data?.error ||
+        "Error desconocido";
+      toast.error(`Error al registrarse: ${mensaje}`);
+      console.error(mensaje);
+    }
   };
 
   return (
-    <form className="form form-grid-2" onSubmit={handleSubmit}>
+    <form
+      className="form form-grid-2"
+      onSubmit={handleSubmit(procesarRegistro)}
+    >
       <div className="field">
         <label htmlFor="reg-nombre">Nombre completo</label>
         <input
@@ -20,6 +52,7 @@ const FormularioRegistro = () => {
           placeholder="Juan Pérez"
           autoComplete="name"
           required
+          {...register("nombre")}
         />
       </div>
 
@@ -31,6 +64,7 @@ const FormularioRegistro = () => {
           placeholder="usuario@mail.com"
           autoComplete="email"
           required
+          {...register("correo")}
         />
       </div>
 
@@ -42,6 +76,7 @@ const FormularioRegistro = () => {
           placeholder="••••••••"
           autoComplete="new-password"
           required
+          {...register("contrasenia")}
         />
         <span className="field-hint">
           Mínimo 6 caracteres, incluir mayúscula y número
@@ -56,6 +91,7 @@ const FormularioRegistro = () => {
           placeholder="••••••••"
           autoComplete="new-password"
           required
+          {...register("confirmarContrasenia")}
         />
         <span className="field-hint">
           Debe coincidir con la contraseña ingresada
@@ -66,10 +102,19 @@ const FormularioRegistro = () => {
         El botón permanecerá deshabilitado si algún campo no es válido.
       </div>
 
+      {/* 
       <Link className="btn btn-primary btn-lg btn-full span-2" to="/dashboard">
-        {loading ? <span className="spinner" /> : null}
         Crear cuenta
-      </Link>
+      </Link> */}
+
+      <button
+        type="submit"
+        className="btn btn-primary btn-lg btn-full span-2"
+        style={{ marginTop: "4px" }}
+        disabled={!isValid}
+      >
+        Crear cuenta
+      </button>
     </form>
   );
 };
