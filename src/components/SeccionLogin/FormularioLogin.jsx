@@ -47,7 +47,7 @@ const FormularioLogin = () => {
             id="login-correo"
             type="email"
             placeholder="usuario@mail.com"
-            {...register("email")}
+            {...register("correo")}
           />
         </div>
         <div className="field">
@@ -56,7 +56,7 @@ const FormularioLogin = () => {
             id="login-contrasenia"
             type="password"
             placeholder="Password1"
-            {...register("password")}
+            {...register("contrasenia")}
           />
         </div>
         <p className="form-message">
