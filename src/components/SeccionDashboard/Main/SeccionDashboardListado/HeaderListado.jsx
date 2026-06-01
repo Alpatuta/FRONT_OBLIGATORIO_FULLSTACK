@@ -2,10 +2,10 @@ import FiltrosListado from "./FiltrosListado";
 
 const HeaderListado = () => {
   return (
-    <div className="section-heading">
+    <div className="section-header">
       <div>
-        <p className="eyebrow">Documentos</p>
-        <h2>Listado de recetas</h2>
+        <div className="card-title">Listado de recetas</div>
+        <div className="card-subtitle">3 recetas en tu colección</div>
       </div>
       <FiltrosListado />
     </div>

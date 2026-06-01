@@ -3,7 +3,7 @@ import RecetasListado from "./RecetasListado";
 
 const SeccionDashboardListado = () => {
   return (
-    <section className="panel">
+    <section className="card">
       <HeaderListado />
       <RecetasListado />
     </section>

@@ -1,9 +1,10 @@
-const TarjetaMetrica = () => {
+const TarjetaMetrica = ({ label, value, sub, colorClass, icon }) => {
   return (
-    <article className="metric">
-      <span className="metric-label">Recetas guardadas</span>
-      <strong>3 / 4</strong>
-      <small>75% de uso del plan plus</small>
+    <article className="metric-card">
+      <div className={`metric-icon ${colorClass}`}>{icon}</div>
+      <div className="metric-label">{label}</div>
+      <div className="metric-value">{value}</div>
+      <div className="metric-sub">{sub}</div>
     </article>
   );
 };

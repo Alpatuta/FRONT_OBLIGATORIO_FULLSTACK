@@ -1,12 +1,12 @@
-const HeaderMain = () => {
+const HeaderMain = ({ eyebrow, title }) => {
   return (
     <header className="topbar">
-      <div>
-        <p className="eyebrow">Dashboard</p>
-        <h1 id="dashboard-title">Gestion general de recetas</h1>
+      <div className="topbar-left">
+        <p className="eyebrow">{eyebrow}</p>
+        <h1 id="dashboard-title">{title}</h1>
       </div>
       <div className="profile-pill">
-        <span className="avatar">RP</span>
+        <div className="p-avatar">RP</div>
         <div>
           <strong>Rodrigo</strong>
           <span>Plan plus</span>

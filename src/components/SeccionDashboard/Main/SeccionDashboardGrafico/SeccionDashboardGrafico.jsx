@@ -1,9 +1,9 @@
-import Grafico from "./Grafico";
 import HeaderGrafico from "./HeaderGrafico";
+import Grafico from "./Grafico";
 
 const SeccionDashboardGrafico = () => {
   return (
-    <section className="panel">
+    <section className="card">
       <HeaderGrafico />
       <Grafico />
     </section>

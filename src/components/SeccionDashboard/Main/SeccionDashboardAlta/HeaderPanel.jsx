@@ -1,11 +1,13 @@
 const HeaderPanel = () => {
   return (
-    <div className="section-heading">
+    <div className="card-header">
       <div>
-        <p className="eyebrow">Alta</p>
-        <h2>Agregar nueva receta</h2>
+        <div className="card-title">Agregar nueva receta</div>
+        <div className="card-subtitle">
+          Completá los datos de tu preparación
+        </div>
       </div>
-      <span className="status-chip">Disponible</span>
+      <span className="badge badge-green">Disponible</span>
     </div>
   );
 };

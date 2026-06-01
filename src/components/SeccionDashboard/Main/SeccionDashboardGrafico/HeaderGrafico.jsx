@@ -1,9 +1,9 @@
 const HeaderGrafico = () => {
   return (
-    <div className="section-heading">
+    <div className="section-header">
       <div>
-        <p className="eyebrow">Visualizacion</p>
-        <h2>Espacio reservado para grafico</h2>
+        <div className="card-title">Distribución de recetas</div>
+        <div className="card-subtitle">Recetas por categoría y dificultad</div>
       </div>
     </div>
   );
