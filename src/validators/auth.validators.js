@@ -36,3 +36,14 @@ export const registerSchema = joi.object({
         'any.default': 'El rol por defecto es "user"',
     }),
 });
+
+export const loginSchema = joi.object({
+    correo: joi.string().email().required().messages({
+        'string.empty': 'El correo no puede estar vacío',
+        'any.required': 'El correo es obligatorio',
+    }),
+    contrasenia: joi.string().min(6).max(100).required().messages({
+        'string.empty': 'La contraseña no puede estar vacía',
+        'any.required': 'La contraseña es obligatoria',
+    }),
+});
