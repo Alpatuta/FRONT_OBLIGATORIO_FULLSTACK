@@ -6,26 +6,41 @@ const DIFF_BADGE = {
   Difícil: "badge-red",
 };
 
-const TarjetaReceta = ({ receta }) => {
+const TarjetaReceta = ({ receta, onDelete }) => {
   const [confirmDelete, setConfirmDelete] = useState(false);
+
+  const thumb = receta.imagen ? (
+    <img
+      src={receta.imagen}
+      alt={receta.titulo}
+      style={{
+        width: "44px",
+        height: "44px",
+        objectFit: "cover",
+        borderRadius: "var(--r)",
+      }}
+    />
+  ) : (
+    receta.titulo?.charAt(0).toUpperCase()
+  );
 
   return (
     <article className="recipe-row">
       <div className="recipe-thumb" aria-hidden="true">
-        {receta.emoji}
+        {thumb}
       </div>
 
       <div className="recipe-info">
         <strong>{receta.titulo}</strong>
         <div className="recipe-meta">
-          <span className="badge badge-gray">{receta.categoria}</span>
-          <span
-            className={`badge ${DIFF_BADGE[receta.dificultad] ?? "badge-gray"}`}
-          >
+          <span className="badge badge-gray">
+            {receta.categoria?.nombre ?? "Sin categoría"}
+          </span>
+          <span className={`badge ${DIFF_BADGE[receta.dificultad] ?? "badge-gray"}`}>
             {receta.dificultad}
           </span>
           <span style={{ fontSize: "12px", color: "var(--text-subtle)" }}>
-            {receta.ingredientes} ingredientes
+            {receta.ingredientes?.length ?? 0} ingredientes
           </span>
         </div>
       </div>
@@ -52,7 +67,7 @@ const TarjetaReceta = ({ receta }) => {
             <button
               className="btn btn-danger btn-sm"
               type="button"
-              onClick={() => setConfirmDelete(false)}
+              onClick={onDelete}
             >
               Confirmar
             </button>

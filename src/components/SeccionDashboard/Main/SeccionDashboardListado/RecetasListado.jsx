@@ -1,37 +1,40 @@
 import TarjetaReceta from "./TarjetaReceta";
 
-const RECETAS_DEMO = [
-  {
-    id: 1,
-    titulo: "Tarta rústica de verduras",
-    categoria: "Vegetariana",
-    dificultad: "Media",
-    ingredientes: 6,
-    emoji: "🥗",
-  },
-  {
-    id: 2,
-    titulo: "Pasta al pesto casero",
-    categoria: "Pastas",
-    dificultad: "Fácil",
-    ingredientes: 5,
-    emoji: "🍝",
-  },
-  {
-    id: 3,
-    titulo: "Brownies de chocolate negro",
-    categoria: "Postres",
-    dificultad: "Media",
-    ingredientes: 8,
-    emoji: "🍫",
-  },
-];
+const RecetasListado = ({ recetas, loading, error, onDelete }) => {
+  if (loading) {
+    return (
+      <div style={{ textAlign: "center", padding: "48px 0", color: "var(--text-muted)" }}>
+        <span className="spinner spinner-dark" />
+      </div>
+    );
+  }
 
-const RecetasListado = () => {
+  if (error) {
+    return (
+      <div className="alert alert-error" style={{ marginTop: "16px" }}>
+        {error}
+      </div>
+    );
+  }
+
+  if (recetas.length === 0) {
+    return (
+      <div className="empty-state">
+        <div className="empty-icon">🍽</div>
+        <h3>Sin recetas</h3>
+        <p>Aún no tenés recetas guardadas. ¡Creá tu primera receta!</p>
+      </div>
+    );
+  }
+
   return (
     <div className="recipe-list">
-      {RECETAS_DEMO.map((receta) => (
-        <TarjetaReceta key={receta.id} receta={receta} />
+      {recetas.map((receta) => (
+        <TarjetaReceta
+          key={receta._id}
+          receta={receta}
+          onDelete={() => onDelete(receta._id)}
+        />
       ))}
     </div>
   );
