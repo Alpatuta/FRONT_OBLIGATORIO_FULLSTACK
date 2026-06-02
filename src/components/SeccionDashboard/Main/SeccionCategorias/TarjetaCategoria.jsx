@@ -19,14 +19,14 @@ const TarjetaCategoria = ({ categoria, onEdit, onDelete }) => {
             flexShrink: 0,
           }}
         >
-          {categoria.emoji}
+          {categoria.emoji ?? categoria.nombre?.charAt(0).toUpperCase()}
         </div>
         <div>
           <strong>{categoria.nombre}</strong>
           <p>{categoria.descripcion}</p>
           <div style={{ marginTop: "6px" }}>
             <span className="badge badge-gray">
-              {categoria.count} receta{categoria.count !== 1 ? "s" : ""}
+              {categoria.recetas?.length ?? 0} receta{categoria.recetas?.length !== 1 ? "s" : ""}
             </span>
           </div>
         </div>

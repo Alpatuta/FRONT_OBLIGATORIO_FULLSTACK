@@ -1,10 +1,10 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
-import Joi from "joi";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { registerSchema } from "../../validators/auth.validators";
-import { Link, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
+import { setCredentials } from "../../features/auth/auth.slice";
 import axios from "axios";
 
 const FormularioRegistro = () => {
@@ -19,6 +19,8 @@ const FormularioRegistro = () => {
     mode: "onChange",
   });
 
+  const dispatch = useDispatch();
+
   const procesarRegistro = async (data) => {
     try {
       const response = await axios.post(
@@ -28,6 +30,14 @@ const FormularioRegistro = () => {
 
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("user", JSON.stringify(response.data.correo));
+
+      dispatch(
+        setCredentials({
+          token: response.data.token,
+          user: response.data.user,
+        }),
+      );
+
       navigate("/dashboard");
     } catch (error) {
       const mensaje =

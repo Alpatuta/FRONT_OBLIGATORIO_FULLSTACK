@@ -1,19 +1,60 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import axios from "axios";
-import Joi from "joi";
+import { useSelector } from "react-redux";
+import { useForm } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { toast } from "react-toastify";
-import { set } from "react-hook-form";
-import { resolve } from "chart.js/helpers";
+import { categoriaSchema } from "../../../../validators/categorias.validators";
+import api from "../../../../api/api";
 
+const FormularioCategoria = ({ editando, onCancelEdit, onSaved }) => {
+  const token = useSelector((state) => state.auth.token);
+  const [loading, setLoading] = useState(false);
+  const [saved, setSaved] = useState(false);
 
-const FormularioCategoria = ({ editando , onCancelEdit, onSaved }) => {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: joiResolver(categoriaSchema),
+  });
 
- 
+  // Cuando cambia lo que se está editando, reinicia el form con esos valores
+  useEffect(() => {
+    reset({
+      nombre: editando?.nombre ?? "",
+      descripcion: editando?.descripcion ?? "",
+    });
+    setSaved(false);
+  }, [editando, reset]);
 
+  const onSubmit = async (data) => {
+    setLoading(true);
+    try {
+      if (editando) {
+        await api.put(`/categorias/${editando._id}`, data, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        toast.success("Categoría actualizada correctamente");
+      } else {
+        await api.post("/categorias", data, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        toast.success("Categoría creada correctamente");
+        reset({ nombre: "", descripcion: "" });
+      }
 
- 
+      setSaved(true);
+      onSaved();
+      if (editando) onCancelEdit();
+      setTimeout(() => setSaved(false), 2500);
+    } catch (err) {
+      toast.error(err.response?.data?.message ?? "Error al guardar la categoría");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -31,17 +72,18 @@ const FormularioCategoria = ({ editando , onCancelEdit, onSaved }) => {
         {editando && <span className="badge badge-amber">Editando</span>}
       </div>
 
-      <form className="form" onSubmit={handleSubmit}>
+      <form className="form" onSubmit={handleSubmit(onSubmit)}>
         <div className="field">
           <label htmlFor="cat-nombre">Nombre</label>
           <input
             id="cat-nombre"
             type="text"
             placeholder="Ej: Postres, Ensaladas…"
-            defaultValue={editando?.nombre ?? ""}
-            key={editando?.id ?? "new"}
-            required
+            {...register("nombre")}
           />
+          {errors.nombre && (
+            <span className="field-error">{errors.nombre.message}</span>
+          )}
         </div>
 
         <div className="field">
@@ -50,10 +92,11 @@ const FormularioCategoria = ({ editando , onCancelEdit, onSaved }) => {
             id="cat-descripcion"
             rows={3}
             placeholder="Descripción breve de la categoría…"
-            defaultValue={editando?.descripcion ?? ""}
-            key={editando?.id ?? "new"}
-            required
+            {...register("descripcion")}
           />
+          {errors.descripcion && (
+            <span className="field-error">{errors.descripcion.message}</span>
+          )}
         </div>
 
         {saved && (
@@ -73,11 +116,7 @@ const FormularioCategoria = ({ editando , onCancelEdit, onSaved }) => {
             {editando ? "Actualizar" : "Crear categoría"}
           </button>
           {editando && (
-            <button
-              className="btn btn-ghost"
-              type="button"
-              onClick={onCancelEdit}
-            >
+            <button className="btn btn-ghost" type="button" onClick={onCancelEdit}>
               Cancelar
             </button>
           )}

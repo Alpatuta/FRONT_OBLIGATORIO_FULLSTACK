@@ -1,9 +1,10 @@
-import { Link, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import axios from "axios";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useForm } from "react-hook-form";
-import Joi from "joi";
 import { loginSchema } from "../../validators/auth.validators";
+import { useDispatch } from "react-redux";
+import { setCredentials } from "../../features/auth/auth.slice";
 import { toast } from "react-toastify";
 
 const FormularioLogin = () => {
@@ -18,6 +19,8 @@ const FormularioLogin = () => {
     mode: "onChange",
   });
 
+  const dispatch = useDispatch();
+
   const procesarLogin = async (data) => {
     try {
       const response = await axios.post(
@@ -27,6 +30,13 @@ const FormularioLogin = () => {
 
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("user", JSON.stringify(response.data.correo));
+      dispatch(
+        setCredentials({
+          token: response.data.token,
+          user: response.data.user,
+        }),
+      );
+
       navigate("/dashboard");
     } catch (error) {
       const mensaje =
