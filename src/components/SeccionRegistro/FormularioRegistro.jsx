@@ -5,10 +5,12 @@ import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { setCredentials } from "../../features/auth/auth.slice";
+import { useState } from "react";
 import axios from "axios";
 
 const FormularioRegistro = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -22,6 +24,7 @@ const FormularioRegistro = () => {
   const dispatch = useDispatch();
 
   const procesarRegistro = async (data) => {
+    setLoading(true);
     try {
       const response = await axios.post(
         "https://obligatorio-fullstack-six.vercel.app/V1/auth/register",
@@ -46,6 +49,8 @@ const FormularioRegistro = () => {
         "Error desconocido";
       toast.error(`Error al registrarse: ${mensaje}`);
       console.error(mensaje);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -123,6 +128,7 @@ const FormularioRegistro = () => {
         style={{ marginTop: "4px" }}
         disabled={!isValid}
       >
+        {loading ? <span className="spinner" /> : null}
         Crear cuenta
       </button>
     </form>

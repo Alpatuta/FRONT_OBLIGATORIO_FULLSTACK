@@ -6,9 +6,11 @@ import { loginSchema } from "../../validators/auth.validators";
 import { useDispatch } from "react-redux";
 import { setCredentials } from "../../features/auth/auth.slice";
 import { toast } from "react-toastify";
+import { useState } from "react";
 
 const FormularioLogin = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -22,6 +24,7 @@ const FormularioLogin = () => {
   const dispatch = useDispatch();
 
   const procesarLogin = async (data) => {
+    setLoading(true);
     try {
       const response = await axios.post(
         "https://obligatorio-fullstack-six.vercel.app/V1/auth/login",
@@ -46,6 +49,8 @@ const FormularioLogin = () => {
 
       toast.error(`Error al iniciar sesión: ${mensaje}`);
       console.error(mensaje);
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -84,6 +89,7 @@ const FormularioLogin = () => {
         style={{ marginTop: "4px" }}
         disabled={!isValid}
       >
+        {loading ? <span className="spinner" /> : null}
         Ingresar
       </button>
     </form>
