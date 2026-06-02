@@ -70,15 +70,13 @@ const FormularioReview = ({ editando, onCancelEdit, onSaved, recetas }) => {
 
     setLoading(true);
     try {
-      const payload = {
-        comentario: comentario.trim(),
-        calificacion,
-        receta: recetaId,
-      };
+      const payload = editando
+        ? { comentario: comentario.trim(), calificacion }
+        : { comentario: comentario.trim(), calificacion, receta: recetaId };
       const headers = { Authorization: `Bearer ${token}` };
 
       if (editando) {
-        await api.put(`/reviews/${editando._id}`, payload, { headers });
+        await api.patch(`/reviews/${editando._id}`, payload, { headers });
       } else {
         await api.post("/reviews", payload, { headers });
         setCalificacion(0);

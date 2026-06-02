@@ -17,7 +17,7 @@ const SeccionReviews = () => {
     setLoading(true);
     setError("");
     try {
-      const { data } = await api.get("/reviews", {
+      const { data } = await api.get("/reviews/usuario/me", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setReviews(data.reviews ?? data);
