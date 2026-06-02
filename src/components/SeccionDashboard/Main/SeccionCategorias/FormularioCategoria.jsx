@@ -1,19 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import axios from "axios";
+import Joi from "joi";
+import { joiResolver } from "@hookform/resolvers/joi";
+import { toast } from "react-toastify";
+import { set } from "react-hook-form";
+import { resolve } from "chart.js/helpers";
 
-const FormularioCategoria = ({ editando, onCancelEdit }) => {
-  const [loading, setLoading] = useState(false);
-  const [saved, setSaved] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setSaved(true);
-      if (editando) onCancelEdit();
-      setTimeout(() => setSaved(false), 2500);
-    }, 1000);
-  };
+const FormularioCategoria = ({ editando , onCancelEdit, onSaved }) => {
+
+ 
+
+
+ 
 
   return (
     <>
