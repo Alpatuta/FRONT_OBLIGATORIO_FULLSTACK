@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { setCredentials } from "../../features/auth/auth.slice";
 import { useState } from "react";
+import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 
 const FormularioRegistro = () => {
@@ -32,12 +33,12 @@ const FormularioRegistro = () => {
       );
 
       localStorage.setItem("token", response.data.token);
-      localStorage.setItem("user", JSON.stringify(response.data.correo));
+      const decodedToken = jwtDecode(response.data.token);
 
       dispatch(
         setCredentials({
           token: response.data.token,
-          user: response.data.user,
+          user: decodedToken,
         }),
       );
 

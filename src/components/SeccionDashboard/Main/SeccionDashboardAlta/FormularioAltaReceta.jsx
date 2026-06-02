@@ -1,57 +1,124 @@
+import { joiResolver } from "@hookform/resolvers/joi";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import api from "../../../../api/api";
+import { crearRecetaFormSchema } from "../../../../validators/recetas.form.validators";
 
-const FormularioAltaReceta = () => {
+const FormularioAltaReceta = ({
+  categorias,
+  loadingCategorias,
+  onRecetaCreada,
+}) => {
+  const token = useSelector((state) => state.auth.token);
   const [loading, setLoading] = useState(false);
-  const [saved, setSaved] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: joiResolver(crearRecetaFormSchema),
+  });
+
+  const crearReceta = async (data) => {
     setLoading(true);
-    setTimeout(() => {
+    try {
+      // Transformamos los campos de ingredientes y pasos de texto a arrays, asumiendo que el usuario ingresa un ingrediente/paso por línea
+      const payload = {
+        ...data,
+        ingredientes: data.ingredientes
+          .split("\n")
+          .map((s) => s.trim())
+          .filter(Boolean),
+        pasos: data.pasos
+          .split("\n")
+          .map((s) => s.trim())
+          .filter(Boolean),
+      };
+
+      await api.post("/recetas", payload, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      toast.success("Receta creada correctamente");
+      // Notificamos al componente padre para que actualice la cantidad de recetas
+      onRecetaCreada();
+      reset();
+    } catch (error) {
+      const mensaje =
+        error.response?.data?.message ||
+        error.response?.data?.error ||
+        "Error desconocido";
+      toast.error(`Error al crear la receta: ${mensaje}`);
+    } finally {
       setLoading(false);
-      setSaved(true);
-      setTimeout(() => setSaved(false), 3000);
-    }, 1200);
+    }
   };
 
   return (
-    <form className="recipe-form" onSubmit={handleSubmit}>
+    <form className="recipe-form" onSubmit={handleSubmit(crearReceta)}>
       <div className="field">
         <label htmlFor="receta-titulo">Título</label>
         <input
           id="receta-titulo"
           type="text"
           placeholder="Tarta rústica de verduras"
-          required
+          {...register("titulo")}
         />
+        {errors.titulo && (
+          <span className="field-error">{errors.titulo.message}</span>
+        )}
       </div>
 
       <div className="field">
         <label htmlFor="receta-categoria">Categoría</label>
-        <select id="receta-categoria">
-          <option value="">Seleccioná una categoría</option>
-          <option>Vegetariana</option>
-          <option>Pastas</option>
-          <option>Postres</option>
-          <option>Ensaladas</option>
-          <option>Carnes</option>
+        <select
+          id="receta-categoria"
+          {...register("categoria")}
+          disabled={loadingCategorias}
+        >
+          <option value="">
+            {/*Si las categorías aún están cargando, mostramos un mensaje de carga en el dropdown*/}
+            {loadingCategorias ? "Cargando…" : "Seleccioná una categoría"}
+          </option>
+          {categorias.map((cat) => (
+            <option key={cat._id} value={cat._id}>
+              {cat.nombre}
+            </option>
+          ))}
         </select>
+        {errors.categoria && (
+          <span className="field-error">{errors.categoria.message}</span>
+        )}
       </div>
 
       <div className="field">
         <label htmlFor="receta-dificultad">Dificultad</label>
-        <select id="receta-dificultad">
+        <select id="receta-dificultad" {...register("dificultad")}>
           <option value="">Seleccioná dificultad</option>
           <option value="Fácil">Fácil</option>
           <option value="Media">Media</option>
           <option value="Difícil">Difícil</option>
         </select>
+        {errors.dificultad && (
+          <span className="field-error">{errors.dificultad.message}</span>
+        )}
       </div>
 
       <div className="field">
-        <label htmlFor="receta-imagen">Imagen</label>
-        <input id="receta-imagen" type="file" accept="image/*" />
-        <span className="field-hint">PNG, JPG o WEBP. Máximo 5MB</span>
+        <label htmlFor="receta-imagen">Imagen (URL)</label>
+        <input
+          id="receta-imagen"
+          type="text"
+          placeholder="https://ejemplo.com/imagen.jpg"
+          {...register("imagen")}
+        />
+        {errors.imagen && (
+          <span className="field-error">{errors.imagen.message}</span>
+        )}
       </div>
 
       <div className="field span-2">
@@ -60,7 +127,11 @@ const FormularioAltaReceta = () => {
           id="receta-descripcion"
           rows={3}
           placeholder="Descripción breve de la receta…"
+          {...register("descripcion")}
         />
+        {errors.descripcion && (
+          <span className="field-error">{errors.descripcion.message}</span>
+        )}
       </div>
 
       <div className="field span-2">
@@ -69,7 +140,11 @@ const FormularioAltaReceta = () => {
           id="receta-ingredientes"
           rows={3}
           placeholder="Un ingrediente por línea: Harina, Huevos, Queso…"
+          {...register("ingredientes")}
         />
+        {errors.ingredientes && (
+          <span className="field-error">{errors.ingredientes.message}</span>
+        )}
         <span className="field-hint">Escribí un ingrediente por línea</span>
       </div>
 
@@ -79,15 +154,13 @@ const FormularioAltaReceta = () => {
           id="receta-pasos"
           rows={4}
           placeholder="Un paso por línea: Mezclar la harina, Agregar los huevos…"
+          {...register("pasos")}
         />
+        {errors.pasos && (
+          <span className="field-error">{errors.pasos.message}</span>
+        )}
         <span className="field-hint">Escribí un paso por línea</span>
       </div>
-
-      {saved && (
-        <div className="alert alert-success span-2">
-          ¡Receta guardada correctamente!
-        </div>
-      )}
 
       <button
         className="btn btn-primary btn-lg btn-full span-2"

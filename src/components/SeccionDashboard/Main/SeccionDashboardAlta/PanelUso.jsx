@@ -1,7 +1,7 @@
 const CIRCUMFERENCE = 2 * Math.PI * 54;
 
-const PanelUso = () => {
-  const used = 3;
+const PanelUso = ({ cantidadRecetas }) => {
+  const used = cantidadRecetas;
   const total = 4;
   const pct = Math.round((used / total) * 100);
   const offset = CIRCUMFERENCE * (1 - pct / 100);
@@ -63,14 +63,6 @@ const PanelUso = () => {
           <strong style={{ color: "var(--text)" }}>{total - used}</strong>
         </div>
       </div>
-
-      <button
-        className="btn btn-amber btn-full"
-        type="button"
-        style={{ marginTop: "16px" }}
-      >
-        Cambiar a Premium
-      </button>
     </aside>
   );
 };

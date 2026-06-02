@@ -1062,9 +1062,10 @@ h3 {
 .usage-ring-text {
   position: absolute;
   inset: 0;
-  display: grid;
-  place-items: center;
+  display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
 }
 .usage-ring-pct {

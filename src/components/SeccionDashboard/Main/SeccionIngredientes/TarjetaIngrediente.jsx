@@ -13,7 +13,7 @@ const TarjetaIngrediente = ({ ingrediente, onEdit, onDelete }) => {
       <div>
         <strong>{ingrediente.nombre}</strong>
         <p>
-          {ingrediente.cantidad} {ingrediente.unidad} disponibles
+          {ingrediente.cantidad} {ingrediente.unidad}
         </p>
       </div>
 

@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { setCredentials } from "../../features/auth/auth.slice";
 import { toast } from "react-toastify";
 import { useState } from "react";
+import { jwtDecode } from "jwt-decode";
 
 const FormularioLogin = () => {
   const navigate = useNavigate();
@@ -32,11 +33,12 @@ const FormularioLogin = () => {
       );
 
       localStorage.setItem("token", response.data.token);
-      localStorage.setItem("user", JSON.stringify(response.data.correo));
+
+      const decodedToken = jwtDecode(response.data.token);
       dispatch(
         setCredentials({
           token: response.data.token,
-          user: response.data.user,
+          user: decodedToken,
         }),
       );
 
