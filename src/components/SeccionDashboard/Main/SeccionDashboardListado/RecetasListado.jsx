@@ -1,9 +1,15 @@
 import TarjetaReceta from "./TarjetaReceta";
 
-const RecetasListado = ({ recetas, loading, error, onDelete }) => {
+const RecetasListado = ({ recetas, loading, error, onDelete, onEdit }) => {
   if (loading) {
     return (
-      <div style={{ textAlign: "center", padding: "48px 0", color: "var(--text-muted)" }}>
+      <div
+        style={{
+          textAlign: "center",
+          padding: "48px 0",
+          color: "var(--text-muted)",
+        }}
+      >
         <span className="spinner spinner-dark" />
       </div>
     );
@@ -34,6 +40,7 @@ const RecetasListado = ({ recetas, loading, error, onDelete }) => {
           key={receta._id}
           receta={receta}
           onDelete={() => onDelete(receta._id)}
+          onEdit={() => onEdit(receta)}
         />
       ))}
     </div>

@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import api from "../../../../api/api";
 import HeaderListado from "./HeaderListado";
 import RecetasListado from "./RecetasListado";
+import FormularioEditarReceta from "./FormularioEditarReceta";
 
 const SeccionDashboardListado = () => {
   const token = useSelector((s) => s.auth.token);
@@ -13,6 +14,7 @@ const SeccionDashboardListado = () => {
   const [error, setError] = useState(null);
   const [filtroDificultad, setFiltroDificultad] = useState("");
   const [filtroCategoria, setFiltroCategoria] = useState("");
+  const [editando, setEditando] = useState(null);
 
   const obtenerRecetas = useCallback(async () => {
     setLoading(true);
@@ -71,7 +73,18 @@ const SeccionDashboardListado = () => {
         loading={loading}
         error={error}
         onDelete={handleDelete}
+        onEdit={(receta) => setEditando(receta)}
       />
+      {editando && (
+        <FormularioEditarReceta
+          receta={editando}
+          onCancelEdit={() => setEditando(null)}
+          onSaved={() => {
+            setEditando(null);
+            obtenerRecetas();
+          }}
+        />
+      )}
     </section>
   );
 };

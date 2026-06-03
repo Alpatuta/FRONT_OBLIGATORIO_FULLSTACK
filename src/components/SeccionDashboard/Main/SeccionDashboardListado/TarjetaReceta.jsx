@@ -6,7 +6,7 @@ const DIFF_BADGE = {
   Difícil: "badge-red",
 };
 
-const TarjetaReceta = ({ receta, onDelete }) => {
+const TarjetaReceta = ({ receta, onDelete, onEdit }) => {
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   const thumb = receta.imagen ? (
@@ -36,7 +36,9 @@ const TarjetaReceta = ({ receta, onDelete }) => {
           <span className="badge badge-gray">
             {receta.categoria?.nombre ?? "Sin categoría"}
           </span>
-          <span className={`badge ${DIFF_BADGE[receta.dificultad] ?? "badge-gray"}`}>
+          <span
+            className={`badge ${DIFF_BADGE[receta.dificultad] ?? "badge-gray"}`}
+          >
             {receta.dificultad}
           </span>
           <span style={{ fontSize: "12px", color: "var(--text-subtle)" }}>
@@ -46,7 +48,11 @@ const TarjetaReceta = ({ receta, onDelete }) => {
       </div>
 
       <div className="row-actions">
-        <button className="btn btn-outline btn-sm" type="button">
+        <button
+          className="btn btn-outline btn-sm"
+          type="button"
+          onClick={onEdit}
+        >
           <svg
             width="14"
             height="14"
