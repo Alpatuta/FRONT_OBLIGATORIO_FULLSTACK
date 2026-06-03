@@ -63,9 +63,12 @@ const FormularioEditarReceta = ({ receta, onCancelEdit, onSaved }) => {
       toast.success("Receta actualizada correctamente");
       onSaved();
     } catch (err) {
-      toast.error(
-        err.response?.data?.message ?? "Error al actualizar la receta",
-      );
+      const rawError = err.response?.data?.error;
+      const mensaje =
+        err.response?.data?.message ||
+        (Array.isArray(rawError) ? rawError.map((e) => e.message).join(", ") : rawError) ||
+        "Error desconocido";
+      toast.error(`Error al actualizar la receta: ${mensaje}`);
     } finally {
       setLoading(false);
     }
