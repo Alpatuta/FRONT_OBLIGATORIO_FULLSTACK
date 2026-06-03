@@ -53,7 +53,7 @@ const FormularioEditarReceta = ({ receta, onCancelEdit, onSaved }) => {
         .filter(Boolean)
         .forEach((paso) => formData.append("pasos", paso));
 
-      if (data.imagen?.[0]) {
+      if (data.imagen instanceof FileList && data.imagen[0]) {
         formData.append("imagen", data.imagen[0]);
       }
 
