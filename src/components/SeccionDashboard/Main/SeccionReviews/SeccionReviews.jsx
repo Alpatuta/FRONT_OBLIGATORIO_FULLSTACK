@@ -82,7 +82,7 @@ const SeccionReviews = () => {
       </aside>
 
       <div>
-        <HeaderReviews count={reviews.length} />
+        <HeaderReviews count={reviews.length} loading={loading} />
 
         {error && (
           <div className="alert alert-error" style={{ marginBottom: "16px" }}>

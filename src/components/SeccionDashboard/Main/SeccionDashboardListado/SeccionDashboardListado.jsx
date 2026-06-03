@@ -67,6 +67,7 @@ const SeccionDashboardListado = () => {
         filtroCategoria={filtroCategoria}
         setFiltroCategoria={setFiltroCategoria}
         categoriasDisponibles={categoriasDisponibles}
+        loading={loading}
       />
       <RecetasListado
         recetas={recetasFiltradas}

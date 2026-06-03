@@ -67,6 +67,9 @@ const FormularioLogin = () => {
           required
           {...register("correo")}
         />
+        {errors.correo && (
+          <span className="error">{errors.correo.message}</span>
+        )}
       </div>
 
       <div className="field">
@@ -79,6 +82,9 @@ const FormularioLogin = () => {
           required
           {...register("contrasenia")}
         />
+        {errors.contrasenia && (
+          <span className="error">{errors.contrasenia.message}</span>
+        )}
       </div>
 
       <div className="alert alert-info" style={{ fontSize: "13px" }}>

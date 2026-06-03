@@ -2,6 +2,7 @@ import FiltrosListado from "./FiltrosListado";
 
 const HeaderListado = ({
   count,
+  loading,
   filtroDificultad,
   setFiltroDificultad,
   filtroCategoria,
@@ -13,7 +14,9 @@ const HeaderListado = ({
       <div>
         <div className="card-title">Listado de recetas</div>
         <div className="card-subtitle">
-          {count} receta{count !== 1 ? "s" : ""} en tu colección
+          {loading
+            ? "Cargando…"
+            : `${count} receta${count !== 1 ? "s" : ""} en tu colección`}
         </div>
       </div>
       <FiltrosListado

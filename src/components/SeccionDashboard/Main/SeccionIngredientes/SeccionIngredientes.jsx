@@ -6,12 +6,12 @@ import FormularioIngrediente from "./FormularioIngrediente";
 import TarjetaIngrediente from "./TarjetaIngrediente";
 import api from "../../../../api/api";
 
-//SAQUE LA PARTE DE DEMO PARA USAR LO REAL!! 
+//SAQUE LA PARTE DE DEMO PARA USAR LO REAL!!
 const SeccionIngredientes = () => {
   const token = useSelector((state) => state.auth.token);
   const [ingredientes, setIngredientes] = useState([]);
   const [editando, setEditando] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const obtenerIngredientes = useCallback(async () => {
@@ -27,7 +27,9 @@ const SeccionIngredientes = () => {
       if (err.response?.status === 404) {
         setIngredientes([]); // Si no hay ingredientes, mostramos una lista vacía en lugar de un error, no es un error error en si
       } else {
-        setError(err.response?.data?.message ?? "Error al cargar los ingredientes");
+        setError(
+          err.response?.data?.message ?? "Error al cargar los ingredientes",
+        );
       }
     } finally {
       setLoading(false);
@@ -64,7 +66,7 @@ const SeccionIngredientes = () => {
       </aside>
 
       <div>
-        <HeaderIngredientes count={ingredientes.length} />
+        <HeaderIngredientes count={ingredientes.length} loading={loading} />
         {loading ? (
           <div
             style={{
@@ -81,7 +83,9 @@ const SeccionIngredientes = () => {
           <div className="empty-state">
             <div className="empty-icon">🌿</div>
             <h3>Sin ingredientes</h3>
-            <p>Agregá ingredientes para gestionar tu stock y usarlos en recetas.</p>
+            <p>
+              Agregá ingredientes para gestionar tu stock y usarlos en recetas.
+            </p>
           </div>
         ) : (
           <div className="entity-list">

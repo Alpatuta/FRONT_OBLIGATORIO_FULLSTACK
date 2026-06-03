@@ -10,7 +10,7 @@ const SeccionCategorias = () => {
   const token = useSelector((state) => state.auth.token);
   const [categorias, setCategorias] = useState([]);
   const [editando, setEditando] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   // -------- OBTENER CATEGORIAS --------
@@ -70,7 +70,7 @@ const SeccionCategorias = () => {
       </aside>
 
       <div>
-        <HeaderCategorias count={categorias.length} />
+        <HeaderCategorias count={categorias.length} loading={loading} />
 
         {loading ? (
           <div
