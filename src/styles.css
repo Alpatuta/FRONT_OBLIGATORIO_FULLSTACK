@@ -140,7 +140,9 @@ ol {
 
 /* Error */
 .error {
+  font-size: 12px;
   color: var(--red);
+  font-weight: 500;
 }
 
 /* ── Typography ── */
@@ -1629,6 +1631,12 @@ h3 {
 .spinner-dark {
   border-color: rgba(15, 23, 42, 0.15);
   border-top-color: var(--primary);
+}
+
+.spinner-lg {
+  width: 40px;
+  height: 40px;
+  border-width: 4px;
 }
 
 /* ══════════════════════════════════════════════

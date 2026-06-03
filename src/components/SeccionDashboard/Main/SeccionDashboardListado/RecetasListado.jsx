@@ -4,13 +4,9 @@ const RecetasListado = ({ recetas, loading, error, onDelete, onEdit }) => {
   if (loading) {
     return (
       <div
-        style={{
-          textAlign: "center",
-          padding: "48px 0",
-          color: "var(--text-muted)",
-        }}
+        style={{ display: "flex", justifyContent: "center", padding: "48px 0" }}
       >
-        <span className="spinner spinner-dark" />
+        <span className="spinner spinner-dark spinner-lg" />
       </div>
     );
   }

@@ -75,12 +75,12 @@ const SeccionCategorias = () => {
         {loading ? (
           <div
             style={{
-              textAlign: "center",
+              display: "flex",
+              justifyContent: "center",
               padding: "48px 0",
-              color: "var(--text-muted)",
             }}
           >
-            <span className="spinner spinner-dark" />
+            <span className="spinner spinner-dark spinner-lg" />
           </div>
         ) : error ? (
           <div className="alert alert-error">{error}</div>

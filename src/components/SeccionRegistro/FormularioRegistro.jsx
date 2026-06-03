@@ -70,6 +70,9 @@ const FormularioRegistro = () => {
           required
           {...register("nombre")}
         />
+        {errors.nombre && (
+          <span className="error">{errors.nombre.message}</span>
+        )}
       </div>
 
       <div className="field">
@@ -82,6 +85,9 @@ const FormularioRegistro = () => {
           required
           {...register("correo")}
         />
+        {errors.correo && (
+          <span className="error">{errors.correo.message}</span>
+        )}
       </div>
 
       <div className="field">
@@ -94,9 +100,9 @@ const FormularioRegistro = () => {
           required
           {...register("contrasenia")}
         />
-        <span className="field-hint">
-          Mínimo 6 caracteres, incluir mayúscula y número
-        </span>
+        {errors.contrasenia && (
+          <span className="error">{errors.contrasenia.message}</span>
+        )}
       </div>
 
       <div className="field">
@@ -109,19 +115,14 @@ const FormularioRegistro = () => {
           required
           {...register("confirmarContrasenia")}
         />
-        <span className="field-hint">
-          Debe coincidir con la contraseña ingresada
-        </span>
+        {errors.confirmarContrasenia && (
+          <span className="error">{errors.confirmarContrasenia.message}</span>
+        )}
       </div>
 
       <div className="alert alert-warning span-2" style={{ fontSize: "13px" }}>
         El botón permanecerá deshabilitado si algún campo no es válido.
       </div>
-
-      {/* 
-      <Link className="btn btn-primary btn-lg btn-full span-2" to="/dashboard">
-        Crear cuenta
-      </Link> */}
 
       <button
         type="submit"
