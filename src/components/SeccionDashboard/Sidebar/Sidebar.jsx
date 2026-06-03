@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../../features/auth/auth.slice";
 
 const Sidebar = () => {
-  const token = useSelector((state) => state.auth.token);
+  let token = useSelector((state) => state.auth.token);
   let user = useSelector((state) => state.auth.user);
   const primerLetraNombre = user?.nombre
     ? user.nombre.charAt(0).toUpperCase()
