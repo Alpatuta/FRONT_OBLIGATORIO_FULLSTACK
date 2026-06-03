@@ -59,9 +59,10 @@ const FormularioAltaReceta = ({
       onRecetaCreada();
       reset();
     } catch (error) {
+      const rawError = error.response?.data?.error;
       const mensaje =
         error.response?.data?.message ||
-        error.response?.data?.error ||
+        (Array.isArray(rawError) ? rawError.map((e) => e.message).join(", ") : rawError) ||
         "Error desconocido";
       toast.error(`Error al crear la receta: ${mensaje}`);
     } finally {
