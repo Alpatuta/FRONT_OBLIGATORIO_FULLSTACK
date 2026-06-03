@@ -23,10 +23,11 @@ const SeccionReviews = () => {
       });
       setReviews(data.reviews ?? data);
     } catch (error) {
-      setError(
-        "No se pudieron cargar las reviews: " +
-          (error.response?.data?.message ?? "Error desconocido"),
-      );
+      if (error.response?.status === 404) {
+        setReviews([]);
+      } else {
+        setError("No se pudieron cargar las reviews: ");
+      }
     } finally {
       setLoading(false);
     }
