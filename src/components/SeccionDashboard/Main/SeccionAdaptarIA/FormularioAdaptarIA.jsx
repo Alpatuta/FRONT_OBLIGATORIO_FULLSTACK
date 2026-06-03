@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import api from "../../../../api/api";
 
 const TIPOS_ADAPTACION = [
   { value: "vegan", label: "Vegana" },
@@ -37,29 +40,47 @@ const TIPOS_ADAPTACION = [
   { value: "soup-and-stew", label: "Sopas y guisos" },
 ];
 
-const RECETA_ADAPTADA_DEMO = {
-  titulo: "Tarta rústica de verduras — Versión Vegana",
-  descripcion:
-    "La misma receta clásica, ahora completamente libre de productos de origen animal. La ricota fue reemplazada por tofu sedoso condimentado y los huevos por una mezcla de lino.",
-  cambios: [
-    "Ricota → Tofu sedoso con levadura nutricional y limón",
-    "Huevos → 2 cucharadas de lino molido + 6 cucharadas de agua",
-    "Masa con manteca → Masa con aceite de coco",
-  ],
-};
-
 const FormularioAdaptarIA = () => {
+  const token = useSelector((s) => s.auth.token);
+  const user = useSelector((s) => s.auth.user);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
+  const [recetas, setRecetas] = useState([]);
+  const [loadingRecetas, setLoadingRecetas] = useState(true);
+  const [recetaId, setRecetaId] = useState("");
+  const [tipo, setTipo] = useState("");
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    api
+      .get("/recetas", {
+        headers: { Authorization: `Bearer ${token}` },
+        params: { autor: user?.correo },
+      })
+      .then(({ data }) => setRecetas(data.recetas ?? data))
+      .catch(() => toast.error("No se pudieron cargar las recetas"))
+      .finally(() => setLoadingRecetas(false));
+  }, [token, user]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!recetaId) return toast.error("Seleccioná una receta");
+    if (!tipo) return toast.error("Seleccioná el tipo de adaptación");
+
     setLoading(true);
     setResult(null);
-    setTimeout(() => {
+    try {
+      const { data } = await api.post(
+        `/recetas/${recetaId}/adaptar`,
+        { tipo },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setResult(data.receta);
+      toast.success("Receta adaptada y guardada correctamente");
+    } catch (err) {
+      toast.error(err.response?.data?.message ?? "Error al adaptar la receta");
+    } finally {
       setLoading(false);
-      setResult(RECETA_ADAPTADA_DEMO);
-    }, 2000);
+    }
   };
 
   return (
@@ -71,22 +92,33 @@ const FormularioAdaptarIA = () => {
       >
         <div className="field">
           <label htmlFor="adaptar-receta">Seleccioná la receta a adaptar</label>
-          <select id="adaptar-receta" defaultValue="">
+          <select
+            id="adaptar-receta"
+            value={recetaId}
+            onChange={(e) => setRecetaId(e.target.value)}
+            disabled={loadingRecetas}
+            required
+          >
             <option value="" disabled>
-              Elegí una receta…
+              {loadingRecetas ? "Cargando…" : "Elegí una receta…"}
             </option>
-            <option>Tarta rústica de verduras</option>
-            <option>Pasta al pesto casero</option>
-            <option>Brownies de chocolate negro</option>
+            {recetas.map((r) => (
+              <option key={r._id} value={r._id}>
+                {r.titulo}
+              </option>
+            ))}
           </select>
         </div>
 
         <div className="field">
           <label htmlFor="adaptar-tipo">Tipo de adaptación</label>
-          <select id="adaptar-tipo" defaultValue="">
-            <option value="" disabled>
-              Seleccioná el tipo…
-            </option>
+          <select
+            id="adaptar-tipo"
+            value={tipo}
+            onChange={(e) => setTipo(e.target.value)}
+            required
+          >
+            <option value="" disabled>Seleccioná el tipo…</option>
             {TIPOS_ADAPTACION.map((t) => (
               <option key={t.value} value={t.value}>
                 {t.label}
@@ -101,7 +133,7 @@ const FormularioAdaptarIA = () => {
         <button
           className="btn btn-primary btn-lg"
           type="submit"
-          disabled={loading}
+          disabled={loading || loadingRecetas}
         >
           {loading ? (
             <>
@@ -141,32 +173,48 @@ const FormularioAdaptarIA = () => {
           <div className="ia-result-title">🔄 {result.titulo}</div>
 
           <div className="ia-result-section">
-            <h4>Descripción de los cambios</h4>
+            <h4>Descripción</h4>
             <p>{result.descripcion}</p>
           </div>
 
           <div className="ia-result-section">
-            <h4>Cambios realizados</h4>
-            <ul style={{ display: "grid", gap: "6px" }}>
-              {result.cambios.map((cambio, i) => (
-                <li key={i} className="ia-step">
-                  <div className="ia-step-num">✓</div>
-                  <p>{cambio}</p>
+            <h4>Ingredientes adaptados</h4>
+            <ul style={{ display: "grid", gap: "5px", paddingLeft: "16px", listStyle: "disc" }}>
+              {result.ingredientes.map((ing, i) => (
+                <li key={i} style={{ fontSize: "14px", color: "var(--text-2)" }}>
+                  {ing}
                 </li>
               ))}
             </ul>
           </div>
 
-          <div style={{ marginTop: "16px", display: "flex", gap: "10px" }}>
-            <button className="btn btn-primary" type="button">
-              Guardar adaptación
-            </button>
+          <div className="ia-result-section">
+            <h4>Preparación</h4>
+            <div className="ia-steps">
+              {result.pasos.map((paso, i) => (
+                <div key={i} className="ia-step">
+                  <div className="ia-step-num">{i + 1}</div>
+                  <p>{paso}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="alert alert-success" style={{ marginTop: "16px" }}>
+            La receta adaptada fue guardada automáticamente en tu colección.
+          </div>
+
+          <div style={{ marginTop: "12px" }}>
             <button
               className="btn btn-outline"
               type="button"
-              onClick={() => setResult(null)}
+              onClick={() => {
+                setResult(null);
+                setRecetaId("");
+                setTipo("");
+              }}
             >
-              Descartar
+              Adaptar otra receta
             </button>
           </div>
         </div>

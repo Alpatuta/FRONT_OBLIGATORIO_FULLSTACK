@@ -1,40 +1,53 @@
-import { useState } from "react";
-
-const RECETA_DEMO = {
-  titulo: "Tarta de Espinaca y Ricota con Masa Integral",
-  descripcion:
-    "Una tarta nutritiva y sabrosa que combina la frescura de la espinaca con la cremosidad de la ricota, todo sobre una base integral crujiente.",
-  ingredientes: [
-    "300g de espinaca fresca",
-    "250g de ricota",
-    "2 huevos",
-    "1 cebolla mediana",
-    "2 dientes de ajo",
-    "Masa integral lista",
-    "Sal, pimienta y nuez moscada al gusto",
-  ],
-  pasos: [
-    "Precalentar el horno a 180°C.",
-    "Saltear la cebolla y el ajo picados hasta dorar.",
-    "Agregar la espinaca y cocinar hasta que reduzca. Condimentar.",
-    "Mezclar la espinaca con la ricota y los huevos. Integrar bien.",
-    "Forrar un molde con la masa y verter el relleno.",
-    "Hornear 35 minutos hasta que esté firme y dorada.",
-  ],
-};
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import api from "../../../../api/api";
 
 const FormularioGenerarIA = () => {
+  const token = useSelector((s) => s.auth.token);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
+  const [categorias, setCategorias] = useState([]);
+  const [loadingCategorias, setLoadingCategorias] = useState(true);
+  const [ingredientes, setIngredientes] = useState("");
+  const [dificultad, setDificultad] = useState("");
+  const [categoriaId, setCategoriaId] = useState("");
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    api
+      .get("/categorias", { headers: { Authorization: `Bearer ${token}` } })
+      .then(({ data }) => setCategorias(data.categorias ?? data))
+      .catch(() => toast.error("No se pudieron cargar las categorías"))
+      .finally(() => setLoadingCategorias(false));
+  }, [token]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const ingredientesArray = ingredientes
+      .split(/[\n,]/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+    if (ingredientesArray.length === 0) return toast.error("Ingresá al menos un ingrediente");
+    if (!dificultad) return toast.error("Seleccioná una dificultad");
+    if (!categoriaId) return toast.error("Seleccioná una categoría");
+
     setLoading(true);
     setResult(null);
-    setTimeout(() => {
+    try {
+      const { data } = await api.post(
+        "/recetas/ia",
+        { ingredientes: ingredientesArray, dificultad, categoria: categoriaId },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setResult(data.receta);
+      toast.success("Receta generada y guardada correctamente");
+    } catch (err) {
+      toast.error(err.response?.data?.message ?? "Error al generar la receta");
+    } finally {
       setLoading(false);
-      setResult(RECETA_DEMO);
-    }, 2200);
+    }
   };
 
   return (
@@ -46,6 +59,8 @@ const FormularioGenerarIA = () => {
             id="ia-ingredientes"
             rows={4}
             placeholder="Ej: espinaca, ricota, huevos, ajo, cebolla…&#10;Un ingrediente por línea o separados por coma"
+            value={ingredientes}
+            onChange={(e) => setIngredientes(e.target.value)}
             required
           />
           <span className="field-hint">
@@ -55,10 +70,13 @@ const FormularioGenerarIA = () => {
 
         <div className="field">
           <label htmlFor="ia-dificultad">Dificultad deseada</label>
-          <select id="ia-dificultad" defaultValue="">
-            <option value="" disabled>
-              Seleccioná dificultad
-            </option>
+          <select
+            id="ia-dificultad"
+            value={dificultad}
+            onChange={(e) => setDificultad(e.target.value)}
+            required
+          >
+            <option value="" disabled>Seleccioná dificultad</option>
             <option value="Fácil">Fácil</option>
             <option value="Media">Media</option>
             <option value="Difícil">Difícil</option>
@@ -67,22 +85,28 @@ const FormularioGenerarIA = () => {
 
         <div className="field">
           <label htmlFor="ia-categoria">Categoría</label>
-          <select id="ia-categoria" defaultValue="">
+          <select
+            id="ia-categoria"
+            value={categoriaId}
+            onChange={(e) => setCategoriaId(e.target.value)}
+            disabled={loadingCategorias}
+            required
+          >
             <option value="" disabled>
-              Seleccioná una categoría
+              {loadingCategorias ? "Cargando…" : "Seleccioná una categoría"}
             </option>
-            <option>Vegetariana</option>
-            <option>Pastas</option>
-            <option>Postres</option>
-            <option>Ensaladas</option>
-            <option>Carnes</option>
+            {categorias.map((cat) => (
+              <option key={cat._id} value={cat._id}>
+                {cat.nombre}
+              </option>
+            ))}
           </select>
         </div>
 
         <button
           className="btn btn-primary btn-lg btn-full span-2"
           type="submit"
-          disabled={loading}
+          disabled={loading || loadingCategorias}
           style={{ background: loading ? "var(--primary-dark)" : undefined }}
         >
           {loading ? (
@@ -121,19 +145,9 @@ const FormularioGenerarIA = () => {
 
           <div className="ia-result-section">
             <h4>Ingredientes</h4>
-            <ul
-              style={{
-                display: "grid",
-                gap: "5px",
-                paddingLeft: "16px",
-                listStyle: "disc",
-              }}
-            >
+            <ul style={{ display: "grid", gap: "5px", paddingLeft: "16px", listStyle: "disc" }}>
               {result.ingredientes.map((ing, i) => (
-                <li
-                  key={i}
-                  style={{ fontSize: "14px", color: "var(--text-2)" }}
-                >
+                <li key={i} style={{ fontSize: "14px", color: "var(--text-2)" }}>
                   {ing}
                 </li>
               ))}
@@ -152,16 +166,22 @@ const FormularioGenerarIA = () => {
             </div>
           </div>
 
-          <div style={{ marginTop: "16px", display: "flex", gap: "10px" }}>
-            <button className="btn btn-primary" type="button">
-              Guardar receta
-            </button>
+          <div className="alert alert-success" style={{ marginTop: "16px" }}>
+            La receta fue guardada automáticamente en tu colección.
+          </div>
+
+          <div style={{ marginTop: "12px" }}>
             <button
               className="btn btn-outline"
               type="button"
-              onClick={() => setResult(null)}
+              onClick={() => {
+                setResult(null);
+                setIngredientes("");
+                setDificultad("");
+                setCategoriaId("");
+              }}
             >
-              Descartar
+              Generar otra receta
             </button>
           </div>
         </div>
