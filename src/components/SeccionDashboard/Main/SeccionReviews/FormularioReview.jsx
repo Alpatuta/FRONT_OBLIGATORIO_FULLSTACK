@@ -92,10 +92,14 @@ const FormularioReview = ({ editando, onCancelEdit, onSaved, recetas }) => {
       if (editando) onCancelEdit();
       setTimeout(() => setSaved(false), 2500);
     } catch (err) {
-      setError(err.response?.data?.message ?? "Error al guardar la review.");
+      const mensaje =
+        err.response?.data?.message ||
+        err.response?.data?.error ||
+        "Error desconocido";
+
+      setError(mensaje);
       toast.error(
-        "Error al guardar la review: " +
-          (err.response?.data?.message ?? "Error desconocido"),
+        "Error al guardar la review: " + (mensaje ?? "Error desconocido"),
       );
     } finally {
       setLoading(false);

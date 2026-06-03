@@ -23,8 +23,12 @@ const SeccionCategorias = () => {
       });
       setCategorias(response.data.categorias ?? response.data);
     } catch (err) {
-      setError(err.response?.data?.message ?? "Error al cargar las categorías");
-      console.error(err);
+      const mensaje =
+        err.response?.data?.message ||
+        err.response?.data?.error ||
+        "Error desconocido";
+      setError(mensaje);
+      console.error(mensaje);
     } finally {
       setLoading(false);
     }
