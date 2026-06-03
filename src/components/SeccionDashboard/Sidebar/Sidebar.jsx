@@ -6,7 +6,7 @@ import { logout } from "../../../features/auth/auth.slice";
 
 const Sidebar = () => {
   const token = useSelector((state) => state.auth.token);
-  const user = useSelector((state) => state.auth.user);
+  let user = useSelector((state) => state.auth.user);
   const primerLetraNombre = user?.nombre
     ? user.nombre.charAt(0).toUpperCase()
     : "U";
@@ -16,6 +16,7 @@ const Sidebar = () => {
   const dispatch = useDispatch();
   const cerrarSesion = () => {
     localStorage.clear();
+
     dispatch(logout((token = null), (user = null), (isAuthenticated = false)));
   };
 
