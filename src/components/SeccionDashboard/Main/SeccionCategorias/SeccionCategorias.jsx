@@ -52,7 +52,7 @@ const SeccionCategorias = () => {
     } catch (err) {
       toast.error(
         "Error al eliminar la categoría: " +
-          (err.response?.data?.message ?? "Error desconocido"),
+          (err.response?.data?.message || err.response?.data?.error || "Error desconocido"),
       );
     }
   };
