@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import api from "../../../../api/api";
 import { crearRecetaFormSchema } from "../../../../validators/recetas.form.validators";
+import CampoImagenFile from "../../../ui/CampoImagenFile";
 
 const FormularioAltaReceta = ({
   categorias,
@@ -18,6 +19,7 @@ const FormularioAltaReceta = ({
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: joiResolver(crearRecetaFormSchema),
@@ -26,20 +28,29 @@ const FormularioAltaReceta = ({
   const crearReceta = async (data) => {
     setLoading(true);
     try {
-      // Transformamos los campos de ingredientes y pasos de texto a arrays, asumiendo que el usuario ingresa un ingrediente/paso por línea
-      const payload = {
-        ...data,
-        ingredientes: data.ingredientes
-          .split("\n")
-          .map((s) => s.trim())
-          .filter(Boolean),
-        pasos: data.pasos
-          .split("\n")
-          .map((s) => s.trim())
-          .filter(Boolean),
-      };
+      const formData = new FormData();
+      formData.append("titulo", data.titulo);
+      formData.append("descripcion", data.descripcion);
+      formData.append("dificultad", data.dificultad);
+      formData.append("categoria", data.categoria);
 
-      await api.post("/recetas", payload, {
+      // Transformamos los campos de ingredientes y pasos de texto a arrays, asumiendo que el usuario ingresa un ingrediente/paso por línea
+      data.ingredientes
+        .split("\n")
+        .map((s) => s.trim())
+        .filter(Boolean)
+        .forEach((ing) => formData.append("ingredientes", ing));
+      data.pasos
+        .split("\n")
+        .map((s) => s.trim())
+        .filter(Boolean)
+        .forEach((paso) => formData.append("pasos", paso));
+
+      if (data.imagen?.[0]) {
+        formData.append("imagen", data.imagen[0]);
+      }
+
+      await api.post("/recetas", formData, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -108,18 +119,14 @@ const FormularioAltaReceta = ({
         )}
       </div>
 
-      <div className="field">
-        <label htmlFor="receta-imagen">Imagen (URL)</label>
-        <input
-          id="receta-imagen"
-          type="text"
-          placeholder="https://ejemplo.com/imagen.jpg"
-          {...register("imagen")}
-        />
-        {errors.imagen && (
-          <span className="field-error">{errors.imagen.message}</span>
-        )}
-      </div>
+      <CampoImagenFile
+        name="imagen"
+        id="receta-imagen"
+        label="Imagen"
+        register={register}
+        watch={watch}
+        error={errors.imagen}
+      />
 
       <div className="field span-2">
         <label htmlFor="receta-descripcion">Descripción</label>

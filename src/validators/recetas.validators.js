@@ -46,9 +46,9 @@ export const crearRecetaSchema = joi.object({
         "string.pattern.base": "La categoría debe ser un ObjectId válido",
         "any.required": "La categoría es obligatoria",
     }),
-    imagen: joi.string().uri().messages({
-        "string.base": "La imagen debe ser una cadena de texto",
-        "string.uri": "La imagen debe ser una URL válida",
+    //La imagen es un buffer
+    imagen: joi.required().messages({
+        "any.required": "La imagen es obligatoria",
     }),
 }).options({ allowUnknown: false });
 

@@ -5,6 +5,7 @@ import { joiResolver } from "@hookform/resolvers/joi";
 import { toast } from "react-toastify";
 import api from "../../../../api/api";
 import { crearRecetaFormSchema } from "../../../../validators/recetas.form.validators";
+import CampoImagenFile from "../../../ui/CampoImagenFile";
 
 const FormularioEditarReceta = ({ receta, onCancelEdit, onSaved }) => {
   const token = useSelector((state) => state.auth.token);
@@ -14,6 +15,7 @@ const FormularioEditarReceta = ({ receta, onCancelEdit, onSaved }) => {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: joiResolver(crearRecetaFormSchema),
@@ -34,18 +36,28 @@ const FormularioEditarReceta = ({ receta, onCancelEdit, onSaved }) => {
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      const payload = {
-        ...data,
-        ingredientes: data.ingredientes
-          .split("\n")
-          .map((s) => s.trim())
-          .filter(Boolean),
-        pasos: data.pasos
-          .split("\n")
-          .map((s) => s.trim())
-          .filter(Boolean),
-      };
-      await api.patch(`/recetas/${receta._id}`, payload, {
+      const formData = new FormData();
+      formData.append("titulo", data.titulo);
+      formData.append("descripcion", data.descripcion);
+      formData.append("dificultad", data.dificultad);
+      formData.append("categoria", data.categoria);
+
+      data.ingredientes
+        .split("\n")
+        .map((s) => s.trim())
+        .filter(Boolean)
+        .forEach((ing) => formData.append("ingredientes", ing));
+      data.pasos
+        .split("\n")
+        .map((s) => s.trim())
+        .filter(Boolean)
+        .forEach((paso) => formData.append("pasos", paso));
+
+      if (data.imagen?.[0]) {
+        formData.append("imagen", data.imagen[0]);
+      }
+
+      await api.patch(`/recetas/${receta._id}`, formData, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success("Receta actualizada correctamente");
@@ -92,13 +104,15 @@ const FormularioEditarReceta = ({ receta, onCancelEdit, onSaved }) => {
           )}
         </div>
 
-        <div className="field">
-          <label htmlFor="edit-imagen">Imagen (URL)</label>
-          <input id="edit-imagen" type="text" {...register("imagen")} />
-          {errors.imagen && (
-            <span className="field-error">{errors.imagen.message}</span>
-          )}
-        </div>
+        <CampoImagenFile
+          name="imagen"
+          id="receta-imagen"
+          label="Imagen"
+          register={register}
+          watch={watch}
+          error={errors.imagen}
+          imagenActual={receta?.imagen}
+        />
 
         <div className="field span-2">
           <label htmlFor="edit-descripcion">Descripción</label>
