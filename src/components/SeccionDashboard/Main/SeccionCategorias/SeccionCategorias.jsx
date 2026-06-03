@@ -46,8 +46,10 @@ const SeccionCategorias = () => {
       // Actualizar la lista de categorías después de eliminar
       setCategorias((prev) => prev.filter((cat) => cat._id !== id));
     } catch (err) {
-      toast.error("Error al eliminar la categoría");
-      console.error(err);
+      toast.error(
+        "Error al eliminar la categoría: " +
+          (err.response?.data?.message ?? "Error desconocido"),
+      );
     }
   };
 

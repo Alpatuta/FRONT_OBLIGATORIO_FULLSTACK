@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import api from "../../../../api/api";
 
 const StarPicker = ({ value, onChange }) => {
@@ -83,13 +84,19 @@ const FormularioReview = ({ editando, onCancelEdit, onSaved, recetas }) => {
         setComentario("");
         setRecetaId("");
       }
-
+      toast.success(
+        `Review ${editando ? "actualizada" : "publicada"} correctamente.`,
+      );
       setSaved(true);
       onSaved();
       if (editando) onCancelEdit();
       setTimeout(() => setSaved(false), 2500);
     } catch (err) {
       setError(err.response?.data?.message ?? "Error al guardar la review.");
+      toast.error(
+        "Error al guardar la review: " +
+          (err.response?.data?.message ?? "Error desconocido"),
+      );
     } finally {
       setLoading(false);
     }

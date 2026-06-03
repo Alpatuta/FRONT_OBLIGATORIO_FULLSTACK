@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import api from "../../../../api/api";
 import HeaderReviews from "./HeaderReviews";
 import FormularioReview from "./FormularioReview";
@@ -21,8 +22,11 @@ const SeccionReviews = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       setReviews(data.reviews ?? data);
-    } catch {
-      setError("No se pudieron cargar las reviews.");
+    } catch (error) {
+      setError(
+        "No se pudieron cargar las reviews: " +
+          (error.response?.data?.message ?? "Error desconocido"),
+      );
     } finally {
       setLoading(false);
     }
@@ -49,9 +53,17 @@ const SeccionReviews = () => {
       await api.delete(`/reviews/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      toast.success("Review eliminada correctamente");
       setReviews((prev) => prev.filter((r) => r._id !== id));
-    } catch {
-      setError("No se pudo eliminar la review.");
+    } catch (error) {
+      setError(
+        "No se pudo eliminar la review: " +
+          (error.response?.data?.message ?? "Error desconocido"),
+      );
+      toast.error(
+        "Error al eliminar la review: " +
+          (error.response?.data?.message ?? "Error desconocido"),
+      );
     }
   };
 
@@ -78,14 +90,23 @@ const SeccionReviews = () => {
         )}
 
         {loading ? (
-          <div style={{ textAlign: "center", padding: "48px 0", color: "var(--text-muted)" }}>
+          <div
+            style={{
+              textAlign: "center",
+              padding: "48px 0",
+              color: "var(--text-muted)",
+            }}
+          >
             <span className="spinner spinner-dark" />
           </div>
         ) : reviews.length === 0 ? (
           <div className="empty-state">
             <div className="empty-icon">⭐</div>
             <h3>Sin reviews</h3>
-            <p>Publicá tu primera review para compartir tu experiencia con una receta.</p>
+            <p>
+              Publicá tu primera review para compartir tu experiencia con una
+              receta.
+            </p>
           </div>
         ) : (
           <div className="entity-list">
