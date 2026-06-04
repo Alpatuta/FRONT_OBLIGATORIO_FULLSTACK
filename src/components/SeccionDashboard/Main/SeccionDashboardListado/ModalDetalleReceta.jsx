@@ -7,7 +7,7 @@ const DIFF_BADGE = {
 };
 
 const ModalDetalleReceta = ({ receta, onClose }) => {
-  const nombreAutor = receta.autorNombre || receta.autor;
+  const nombreAutor = receta.autorNombre
 
   // Cierra el modal al hacer clic en el overlay (fuera de la card)
   const handleOverlayClick = (e) => {
