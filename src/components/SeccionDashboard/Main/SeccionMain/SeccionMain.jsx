@@ -1,12 +1,45 @@
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useDashboard } from "../../../../context/DashboardContext";
 import Metricas from "./Metricas";
+import api from "../../../../api/api";
 
 const SeccionMain = () => {
   const { setCurrentSection } = useDashboard();
+  const { user, token } = useSelector((s) => s.auth);
+  const esPremium = user?.plan === "premium";
+  const totalRecetas = esPremium ? null : 4;
+
+  const [cantidadRecetas, setCantidadRecetas] = useState(0);
+  const [cantidadCategorias, setCantidadCategorias] = useState(0);
+  const [cantidadReviews, setCantidadReviews] = useState(0);
+
+  const pct = totalRecetas
+    ? Math.round((cantidadRecetas / totalRecetas) * 100)
+    : 0;
+
+  useEffect(() => {
+    const headers = { Authorization: `Bearer ${token}` };
+    Promise.all([
+      api.get("/recetas", { headers, params: { autor: user?.correo } }),
+      api.get("/categorias", { headers }),
+      api.get("/reviews/usuario/me", { headers }),
+    ])
+      .then(([recetasRes, categoriasRes, reviewsRes]) => {
+        setCantidadRecetas(recetasRes.data.recetas?.length ?? 0);
+        setCantidadCategorias(categoriasRes.data.categorias?.length ?? 0);
+        setCantidadReviews(reviewsRes.data.reviews?.length ?? 0);
+      })
+      .catch(console.error);
+  }, [token, user]);
 
   return (
     <>
-      <Metricas />
+      <Metricas
+        cantidadRecetas={cantidadRecetas}
+        cantidadCategorias={cantidadCategorias}
+        cantidadReviews={cantidadReviews}
+      />
 
       <div className="overview-grid">
         <div>
@@ -104,13 +137,20 @@ const SeccionMain = () => {
           </div>
         </div>
 
+        {/* Tarjeta uso del plan */}
         <div className="card">
           <div className="card-header">
             <div>
               <div className="card-title">Uso del plan</div>
-              <div className="card-subtitle">Plan plus activo</div>
+              <div className="card-subtitle">
+                Plan {esPremium ? "Premium" : "Plus"} activo
+              </div>
             </div>
-            <span className="badge badge-amber">Plus</span>
+            <span
+              className={`badge ${esPremium ? "badge-green" : "badge-amber"}`}
+            >
+              {esPremium ? "Premium" : "Plus"}
+            </span>
           </div>
           <div style={{ textAlign: "center", padding: "8px 0" }}>
             <div
@@ -121,7 +161,9 @@ const SeccionMain = () => {
                 lineHeight: 1,
               }}
             >
-              3/4
+              {esPremium
+                ? `${cantidadRecetas} / ∞`
+                : `${cantidadRecetas}/${totalRecetas}`}
             </div>
             <div
               style={{
@@ -133,33 +175,41 @@ const SeccionMain = () => {
             >
               Recetas utilizadas
             </div>
-            <div className="usage-bar-wrap">
+            {!esPremium && (
+              <div className="usage-bar-wrap">
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    fontSize: "12px",
+                    color: "var(--text-subtle)",
+                    marginBottom: "6px",
+                  }}
+                >
+                  <span>0</span>
+                  <span>{pct}%</span>
+                  <span>{totalRecetas}</span>
+                </div>
+                <div className="usage-bar-track">
+                  <div
+                    className="usage-bar-fill"
+                    style={{ width: `${pct}%` }}
+                  />
+                </div>
+              </div>
+            )}
+            {esPremium && (
               <div
                 style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  fontSize: "12px",
-                  color: "var(--text-subtle)",
-                  marginBottom: "6px",
+                  fontSize: "13px",
+                  color: "var(--primary)",
+                  fontWeight: 600,
                 }}
               >
-                <span>0</span>
-                <span>75%</span>
-                <span>4</span>
+                Sin límite de recetas
               </div>
-              <div className="usage-bar-track">
-                <div className="usage-bar-fill" style={{ width: "75%" }} />
-              </div>
-            </div>
+            )}
           </div>
-          <button
-            className="btn btn-amber btn-full"
-            style={{ marginTop: "16px" }}
-            type="button"
-            onClick={() => setCurrentSection("mi-plan")}
-          >
-            Actualizar a Premium
-          </button>
         </div>
       </div>
     </>
