@@ -1,4 +1,5 @@
 import { createPortal } from "react-dom";
+import { useSelector } from "react-redux";
 
 const DIFF_BADGE = {
   Fácil: "badge-green",
@@ -7,6 +8,9 @@ const DIFF_BADGE = {
 };
 
 const ModalDetalleReceta = ({ receta, onClose }) => {
+  const user = useSelector((state) => state.auth.user);
+  const nombreAutor = receta.autor === user?.correo ? user?.nombre : receta.autor;
+
   // Cierra el modal al hacer clic en el overlay (fuera de la card)
   const handleOverlayClick = (e) => {
     if (e.target === e.currentTarget) onClose();
@@ -110,7 +114,7 @@ const ModalDetalleReceta = ({ receta, onClose }) => {
 
         {/* Meta info */}
         <div style={{ fontSize: "13px", color: "var(--text-muted)", marginBottom: "20px", display: "grid", gap: "4px" }}>
-          <span>👤 Creado por: <strong>{receta.autor}</strong></span>
+          <span>👤 Creado por: <strong>{nombreAutor}</strong></span>
           {fecha && <span>📅 Fecha: <strong>{fecha}</strong></span>}
         </div>
 
