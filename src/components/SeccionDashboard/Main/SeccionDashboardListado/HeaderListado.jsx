@@ -8,6 +8,8 @@ const HeaderListado = ({
   filtroCategoria,
   setFiltroCategoria,
   categoriasDisponibles,
+  soloMias,
+  setSoloMias,
 }) => {
   return (
     <div className="section-header">
@@ -16,16 +18,34 @@ const HeaderListado = ({
         <div className="card-subtitle">
           {loading
             ? "Cargando…"
-            : `${count} receta${count !== 1 ? "s" : ""} en tu colección`}
+            : `${count} receta${count !== 1 ? "s" : ""} ${soloMias ? "en tu colección" : "en total"}`}
         </div>
       </div>
-      <FiltrosListado
-        filtroDificultad={filtroDificultad}
-        setFiltroDificultad={setFiltroDificultad}
-        filtroCategoria={filtroCategoria}
-        setFiltroCategoria={setFiltroCategoria}
-        categoriasDisponibles={categoriasDisponibles}
-      />
+      <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+        <div className="toggle-group">
+          <button
+            type="button"
+            className={`toggle-btn${soloMias ? " active" : ""}`}
+            onClick={() => setSoloMias(true)}
+          >
+            Mis recetas
+          </button>
+          <button
+            type="button"
+            className={`toggle-btn${!soloMias ? " active" : ""}`}
+            onClick={() => setSoloMias(false)}
+          >
+            Todas
+          </button>
+        </div>
+        <FiltrosListado
+          filtroDificultad={filtroDificultad}
+          setFiltroDificultad={setFiltroDificultad}
+          filtroCategoria={filtroCategoria}
+          setFiltroCategoria={setFiltroCategoria}
+          categoriasDisponibles={categoriasDisponibles}
+        />
+      </div>
     </div>
   );
 };

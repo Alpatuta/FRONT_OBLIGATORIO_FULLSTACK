@@ -6,7 +6,7 @@ const DIFF_BADGE = {
   Difícil: "badge-red",
 };
 
-const TarjetaReceta = ({ receta, onDelete, onEdit }) => {
+const TarjetaReceta = ({ receta, onDelete, onEdit, esPropia }) => {
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   const thumb = receta.imagen ? (
@@ -48,11 +48,12 @@ const TarjetaReceta = ({ receta, onDelete, onEdit }) => {
       </div>
 
       <div className="row-actions">
-        <button
-          className="btn btn-outline btn-sm"
-          type="button"
-          onClick={onEdit}
-        >
+        {esPropia && (
+          <button
+            className="btn btn-outline btn-sm"
+            type="button"
+            onClick={onEdit}
+          >
           <svg
             width="14"
             height="14"
@@ -67,8 +68,9 @@ const TarjetaReceta = ({ receta, onDelete, onEdit }) => {
             <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
           </svg>
           Editar
-        </button>
-        {confirmDelete ? (
+        </button>)}
+        {esPropia && (
+        confirmDelete ? (
           <>
             <button
               className="btn btn-danger btn-sm"
@@ -109,6 +111,7 @@ const TarjetaReceta = ({ receta, onDelete, onEdit }) => {
             </svg>
             Eliminar
           </button>
+        )
         )}
       </div>
     </article>

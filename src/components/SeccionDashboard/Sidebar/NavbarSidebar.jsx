@@ -144,7 +144,7 @@ const NAV_GROUPS = [
     label: "Principal",
     items: [
       { id: "resumen", label: "Resumen", icon: <IconHome /> },
-      { id: "mis-recetas", label: "Mis Recetas", icon: <IconBook /> },
+      { id: "mis-recetas", label: "Recetas", icon: <IconBook /> },
       { id: "nueva-receta", label: "Nueva Receta", icon: <IconPlus /> },
     ],
   },

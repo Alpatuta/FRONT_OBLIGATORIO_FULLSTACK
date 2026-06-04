@@ -1,6 +1,8 @@
 import TarjetaReceta from "./TarjetaReceta";
 
-const RecetasListado = ({ recetas, loading, error, onDelete, onEdit }) => {
+
+
+const RecetasListado = ({ recetas, loading, error, onDelete, onEdit, correoUsuario }) => {
   if (loading) {
     return (
       <div
@@ -37,6 +39,7 @@ const RecetasListado = ({ recetas, loading, error, onDelete, onEdit }) => {
           receta={receta}
           onDelete={() => onDelete(receta._id)}
           onEdit={() => onEdit(receta)}
+          esPropia={receta.autor === correoUsuario}
         />
       ))}
     </div>

@@ -14,13 +14,16 @@ const SeccionDashboardListado = () => {
   const [error, setError] = useState(null);
   const [filtroDificultad, setFiltroDificultad] = useState("");
   const [filtroCategoria, setFiltroCategoria] = useState("");
+  const [soloMias, setSoloMias] = useState(true);
   const [editando, setEditando] = useState(null);
+
 
   const obtenerRecetas = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const params = { autor: user?.correo };
+      const params = {};
+      if (soloMias) params.autor = user?.correo;
       if (filtroDificultad) params.dificultad = filtroDificultad;
       const { data } = await api.get("/recetas", {
         headers: { Authorization: `Bearer ${token}` },
@@ -32,7 +35,7 @@ const SeccionDashboardListado = () => {
     } finally {
       setLoading(false);
     }
-  }, [token, user, filtroDificultad]);
+  }, [token, user, filtroDificultad, soloMias]);
 
   useEffect(() => {
     obtenerRecetas();
@@ -68,6 +71,8 @@ const SeccionDashboardListado = () => {
         setFiltroCategoria={setFiltroCategoria}
         categoriasDisponibles={categoriasDisponibles}
         loading={loading}
+        soloMias={soloMias}
+        setSoloMias={setSoloMias}
       />
       <RecetasListado
         recetas={recetasFiltradas}
@@ -75,6 +80,7 @@ const SeccionDashboardListado = () => {
         error={error}
         onDelete={handleDelete}
         onEdit={(receta) => setEditando(receta)}
+        correoUsuario={user?.correo}
       />
       {editando && (
         <FormularioEditarReceta
