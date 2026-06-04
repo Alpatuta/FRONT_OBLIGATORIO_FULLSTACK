@@ -49,7 +49,7 @@ const SeccionDashboardAlta = () => {
         loadingCategorias={loadingCategorias}
         onRecetaCreada={fetchCantidadRecetas}
       />
-      <PanelUso cantidadRecetas={cantidadRecetas} />
+      <PanelUso cantidadRecetas={cantidadRecetas} plan={user?.plan} />
     </div>
   );
 };

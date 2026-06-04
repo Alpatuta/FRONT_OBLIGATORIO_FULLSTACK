@@ -1,4 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import api from "../../../../api/api";
+import { setCredentials } from "../../../../features/auth/auth.slice";
 
 const CheckIcon = () => (
   <svg
@@ -41,21 +45,94 @@ const FEATURES_PREMIUM = [
 const CIRCUMFERENCE = 2 * Math.PI * 54;
 
 const PanelPlan = () => {
+  const dispatch = useDispatch();
+  const { user, token } = useSelector((s) => s.auth);
+  const esAdmin = user?.rol === "admin";
+  const esPremium = user?.plan === "premium";
+
   const [upgrading, setUpgrading] = useState(false);
   const [upgraded, setUpgraded] = useState(false);
 
-  const used = 3;
-  const total = 4;
-  const pct = Math.round((used / total) * 100);
+  const [cantidadRecetas, setCantidadRecetas] = useState(0);
+
+  const [usuarios, setUsuarios] = useState([]);
+  const [loadingUsuarios, setLoadingUsuarios] = useState(false);
+  const [soloPlusFiltro, setSoloPlusFiltro] = useState(false);
+  const [cambiando, setCambiando] = useState(null);
+
+  const total = esPremium ? null : 4;
+  const used = cantidadRecetas;
+  const pct = total ? Math.round((used / total) * 100) : 0;
   const offset = CIRCUMFERENCE * (1 - pct / 100);
 
-  const handleUpgrade = () => {
+  useEffect(() => {
+    api
+      .get("/recetas", {
+        headers: { Authorization: `Bearer ${token}` },
+        params: { autor: user?.correo },
+      })
+      .then((res) => setCantidadRecetas(res.data.recetas?.length ?? 0))
+      .catch(() => {});
+  }, [token, user]);
+
+  useEffect(() => {
+    if (!esAdmin) return;
+    setLoadingUsuarios(true);
+    api
+      .get("/usuarios", { headers: { Authorization: `Bearer ${token}` } })
+      .then((res) => setUsuarios(res.data))
+      .catch(() => toast.error("Error al cargar los usuarios"))
+      .finally(() => setLoadingUsuarios(false));
+  }, [esAdmin, token]);
+
+  const handleUpgrade = async () => {
     setUpgrading(true);
-    setTimeout(() => {
-      setUpgrading(false);
+    try {
+      await api.patch(
+        "/usuarios/cambiar-plan",
+        {},
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
       setUpgraded(true);
-    }, 1500);
+      dispatch(setCredentials({ token, user: { ...user, plan: "premium" } }));
+      toast.success("¡Plan actualizado a Premium exitosamente!");
+    } catch (err) {
+      toast.error(
+        err.response?.data?.message ||
+          err.response?.data?.error ||
+          "Error al cambiar el plan",
+      );
+    } finally {
+      setUpgrading(false);
+    }
   };
+
+  const handleCambiarPlanUsuario = async (correo, id) => {
+    setCambiando(id);
+    try {
+      await api.patch(
+        "/usuarios/cambiar-plan-admin",
+        { correo },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      setUsuarios((prev) =>
+        prev.map((u) => (u._id === id ? { ...u, plan: "premium" } : u)),
+      );
+      toast.success("Plan del usuario actualizado a Premium");
+    } catch (err) {
+      toast.error(
+        err.response?.data?.message ||
+          err.response?.data?.error ||
+          "Error al cambiar el plan",
+      );
+    } finally {
+      setCambiando(null);
+    }
+  };
+
+  const usuariosFiltrados = soloPlusFiltro
+    ? usuarios.filter((u) => u.plan === "plus")
+    : usuarios;
 
   return (
     <>
@@ -99,7 +176,7 @@ const PanelPlan = () => {
                       color: "var(--text)",
                     }}
                   >
-                    {pct}%
+                    {esPremium ? "∞" : `${pct}%`}
                   </div>
                 </div>
               </div>
@@ -110,7 +187,7 @@ const PanelPlan = () => {
                   marginTop: "4px",
                 }}
               >
-                {used}/{total} recetas
+                {esPremium ? `${used} recetas` : `${used}/${total} recetas`}
               </div>
             </div>
           </div>
@@ -148,7 +225,20 @@ const PanelPlan = () => {
             ))}
           </ul>
 
-          {upgraded ? (
+          {!esAdmin && (
+            <div
+              style={{
+                fontSize: "13px",
+                color: "var(--text-muted)",
+                textAlign: "center",
+                marginBottom: "8px",
+              }}
+            >
+              Solo un administrador puede cambiar el plan
+            </div>
+          )}
+
+          {upgraded || esPremium ? (
             <div className="alert alert-success">
               ¡Plan actualizado a Premium exitosamente!
             </div>
@@ -156,8 +246,8 @@ const PanelPlan = () => {
             <button
               className="btn btn-primary btn-lg btn-full"
               type="button"
-              onClick={handleUpgrade}
-              disabled={upgrading}
+              onClick={esAdmin ? handleUpgrade : undefined}
+              disabled={!esAdmin || upgrading}
             >
               {upgrading ? (
                 <>
@@ -171,7 +261,7 @@ const PanelPlan = () => {
         </div>
       </div>
 
-      {/* Información adicional */}
+      {/* Información del plan */}
       <div className="card" style={{ marginTop: "0" }}>
         <div className="card-header">
           <div>
@@ -189,10 +279,16 @@ const PanelPlan = () => {
           }}
         >
           {[
-            { label: "Plan actual", value: "Plus", badge: "badge-amber" },
+            {
+              label: "Plan actual",
+              value: user?.plan
+                ? user.plan.charAt(0).toUpperCase() + user.plan.slice(1)
+                : "Plus",
+              badge: esPremium ? "badge-green" : "badge-amber",
+            },
             {
               label: "Recetas usadas",
-              value: `${used} / ${total}`,
+              value: esPremium ? `${used} / ∞` : `${used} / ${total}`,
               badge: null,
             },
             { label: "Estado", value: "Activo", badge: "badge-green" },
@@ -244,8 +340,6 @@ const PanelPlan = () => {
                   ? "Cargando…"
                   : `${usuariosFiltrados.length} usuario${usuariosFiltrados.length !== 1 ? "s" : ""}`}
               </div>
-
-              {/* Toggle igual al de recetas */}
               <div
                 style={{
                   display: "flex",
@@ -326,12 +420,18 @@ const PanelPlan = () => {
                     <div style={{ fontWeight: 600, fontSize: "14px" }}>
                       {u.nombre}
                     </div>
-                    <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>
+                    <div
+                      style={{ fontSize: "12px", color: "var(--text-muted)" }}
+                    >
                       {u.correo}
                     </div>
                   </div>
                   <div
-                    style={{ display: "flex", alignItems: "center", gap: "12px" }}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "12px",
+                    }}
                   >
                     <span
                       className={`badge ${u.plan === "premium" ? "badge-green" : "badge-amber"}`}
