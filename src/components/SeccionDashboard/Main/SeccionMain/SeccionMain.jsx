@@ -24,13 +24,23 @@ const SeccionMain = () => {
       api.get("/recetas", { headers, params: { autor: user?.correo } }),
       api.get("/categorias", { headers }),
       api.get("/reviews/usuario/me", { headers }),
-    ])
-      .then(([recetasRes, categoriasRes, reviewsRes]) => {
-        setCantidadRecetas(recetasRes.data.recetas?.length ?? 0);
-        setCantidadCategorias(categoriasRes.data.categorias?.length ?? 0);
-        setCantidadReviews(reviewsRes.data.reviews?.length ?? 0);
-      })
-      .catch(console.error);
+    ]).then(([recetasRes, categoriasRes, reviewsRes]) => {
+      setCantidadRecetas(
+        recetasRes.status === "fulfilled"
+          ? (recetasRes.value.data.recetas?.length ?? 0)
+          : 0,
+      );
+      setCantidadCategorias(
+        categoriasRes.status === "fulfilled"
+          ? (categoriasRes.value.data.categorias?.length ?? 0)
+          : 0,
+      );
+      setCantidadReviews(
+        reviewsRes.status === "fulfilled"
+          ? (reviewsRes.value.data.reviews?.length ?? 0)
+          : 0,
+      );
+    });
   }, [token, user]);
 
   return (
