@@ -13,34 +13,38 @@ const SeccionMain = () => {
   const [cantidadRecetas, setCantidadRecetas] = useState(0);
   const [cantidadCategorias, setCantidadCategorias] = useState(0);
   const [cantidadReviews, setCantidadReviews] = useState(0);
+  const [loadingMetricas, setLoadingMetricas] = useState(true);
 
   const pct = totalRecetas
     ? Math.round((cantidadRecetas / totalRecetas) * 100)
     : 0;
 
   useEffect(() => {
+    setLoadingMetricas(true);
     const headers = { Authorization: `Bearer ${token}` };
     Promise.allSettled([
       api.get("/recetas", { headers, params: { autor: user?.correo } }),
       api.get("/categorias", { headers }),
       api.get("/reviews/usuario/me", { headers }),
-    ]).then(([recetasRes, categoriasRes, reviewsRes]) => {
-      setCantidadRecetas(
-        recetasRes.status === "fulfilled"
-          ? (recetasRes.value.data.recetas?.length ?? 0)
-          : 0,
-      );
-      setCantidadCategorias(
-        categoriasRes.status === "fulfilled"
-          ? (categoriasRes.value.data.categorias?.length ?? 0)
-          : 0,
-      );
-      setCantidadReviews(
-        reviewsRes.status === "fulfilled"
-          ? (reviewsRes.value.data.reviews?.length ?? 0)
-          : 0,
-      );
-    });
+    ])
+      .then(([recetasRes, categoriasRes, reviewsRes]) => {
+        setCantidadRecetas(
+          recetasRes.status === "fulfilled"
+            ? (recetasRes.value.data.recetas?.length ?? 0)
+            : 0,
+        );
+        setCantidadCategorias(
+          categoriasRes.status === "fulfilled"
+            ? (categoriasRes.value.data.categorias?.length ?? 0)
+            : 0,
+        );
+        setCantidadReviews(
+          reviewsRes.status === "fulfilled"
+            ? (reviewsRes.value.data.reviews?.length ?? 0)
+            : 0,
+        );
+      })
+      .finally(() => setLoadingMetricas(false));
   }, [token, user]);
 
   return (
@@ -49,6 +53,7 @@ const SeccionMain = () => {
         cantidadRecetas={cantidadRecetas}
         cantidadCategorias={cantidadCategorias}
         cantidadReviews={cantidadReviews}
+        loading={loadingMetricas}
       />
 
       <div className="overview-grid">

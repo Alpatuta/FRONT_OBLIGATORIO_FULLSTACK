@@ -1,7 +1,16 @@
 import { useSelector } from "react-redux";
 import TarjetaMetrica from "./TarjetaMetrica";
 
-const Metricas = ({ cantidadRecetas, cantidadCategorias, cantidadReviews }) => {
+const SkeletonMetrica = () => (
+  <article className="metric-card">
+    <div className="skeleton-block" style={{ width: 40, height: 40, borderRadius: "var(--r)", marginBottom: 14 }} />
+    <div className="skeleton-block" style={{ width: "55%", height: 13, borderRadius: 6, marginBottom: 10 }} />
+    <div className="skeleton-block" style={{ width: "70%", height: 30, borderRadius: 6, marginBottom: 10 }} />
+    <div className="skeleton-block" style={{ width: "85%", height: 12, borderRadius: 6 }} />
+  </article>
+);
+
+const Metricas = ({ cantidadRecetas, cantidadCategorias, cantidadReviews, loading }) => {
   const { user } = useSelector((s) => s.auth);
   const esPremium = user?.plan === "premium";
   const totalRecetas = esPremium ? null : 4;
@@ -97,6 +106,16 @@ const Metricas = ({ cantidadRecetas, cantidadCategorias, cantidadReviews }) => {
       ),
     },
   ];
+
+  if (loading) {
+    return (
+      <section className="metrics-grid" aria-label="Cargando métricas">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <SkeletonMetrica key={i} />
+        ))}
+      </section>
+    );
+  }
 
   return (
     <section className="metrics-grid" aria-label="Resumen de uso">
