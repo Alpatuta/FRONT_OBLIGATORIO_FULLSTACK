@@ -20,32 +20,52 @@ const HeaderListado = ({
             ? "Cargando…"
             : `${count} receta${count !== 1 ? "s" : ""} ${soloMias ? "en tu colección" : "en total"}`}
         </div>
-      </div>
-      <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-        <div className="toggle-group">
-          <button
-            type="button"
-            className={`toggle-btn${soloMias ? " active" : ""}`}
-            onClick={() => setSoloMias(true)}
-          >
-            Mis recetas
-          </button>
-          <button
-            type="button"
-            className={`toggle-btn${!soloMias ? " active" : ""}`}
-            onClick={() => setSoloMias(false)}
-          >
+
+        {/* Toggle debajo del subtítulo */}
+        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginTop: "8px" }}>
+          <span style={{ fontSize: "13px", color: "var(--text-muted)" }}>
             Todas
-          </button>
+          </span>
+          <div
+            onClick={() => setSoloMias(!soloMias)}
+            style={{
+              width: "44px",
+              height: "24px",
+              borderRadius: "999px",
+              background: soloMias ? "var(--primary, #16a34a)" : "#cbd5e1",
+              position: "relative",
+              cursor: "pointer",
+              transition: "background 0.2s ease",
+              flexShrink: 0,
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                top: "3px",
+                left: soloMias ? "23px" : "3px",
+                width: "18px",
+                height: "18px",
+                borderRadius: "50%",
+                background: "white",
+                boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
+                transition: "left 0.2s ease",
+              }}
+            />
+          </div>
+          <span style={{ fontSize: "13px", color: "var(--text-muted)" }}>
+            Mis recetas
+          </span>
         </div>
-        <FiltrosListado
-          filtroDificultad={filtroDificultad}
-          setFiltroDificultad={setFiltroDificultad}
-          filtroCategoria={filtroCategoria}
-          setFiltroCategoria={setFiltroCategoria}
-          categoriasDisponibles={categoriasDisponibles}
-        />
       </div>
+
+      <FiltrosListado
+        filtroDificultad={filtroDificultad}
+        setFiltroDificultad={setFiltroDificultad}
+        filtroCategoria={filtroCategoria}
+        setFiltroCategoria={setFiltroCategoria}
+        categoriasDisponibles={categoriasDisponibles}
+      />
     </div>
   );
 };
