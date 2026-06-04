@@ -10,28 +10,7 @@ import {
 } from "chart.js";
 import { Bar, Doughnut } from "react-chartjs-2";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  ArcElement,
-);
-
-const barData = {
-  labels: ["Vegetariana", "Pastas", "Postres", "Ensaladas", "Carnes"],
-  datasets: [
-    {
-      label: "Recetas",
-      data: [1, 1, 1, 0, 0],
-      backgroundColor: ["#16a34a", "#2563eb", "#7c3aed", "#d97706", "#dc2626"],
-      borderRadius: 6,
-      borderSkipped: false,
-    },
-  ],
-};
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 
 const barOptions = {
   responsive: true,
@@ -61,18 +40,6 @@ const barOptions = {
   },
 };
 
-const doughnutData = {
-  labels: ["Fácil", "Media", "Difícil"],
-  datasets: [
-    {
-      data: [1, 2, 0],
-      backgroundColor: ["#16a34a", "#d97706", "#dc2626"],
-      borderWidth: 0,
-      hoverOffset: 6,
-    },
-  ],
-};
-
 const doughnutOptions = {
   responsive: true,
   maintainAspectRatio: false,
@@ -97,7 +64,7 @@ const doughnutOptions = {
   cutout: "65%",
 };
 
-const Grafico = () => {
+const Grafico = ({ barData, doughnutData }) => {
   return (
     <div
       style={{
@@ -108,14 +75,7 @@ const Grafico = () => {
       }}
     >
       <div>
-        <p
-          style={{
-            fontSize: "13px",
-            fontWeight: 600,
-            color: "var(--text-muted)",
-            marginBottom: "12px",
-          }}
-        >
+        <p style={{ fontSize: "13px", fontWeight: 600, color: "var(--text-muted)", marginBottom: "12px" }}>
           Recetas por categoría
         </p>
         <div className="chart-container">
@@ -123,14 +83,7 @@ const Grafico = () => {
         </div>
       </div>
       <div>
-        <p
-          style={{
-            fontSize: "13px",
-            fontWeight: 600,
-            color: "var(--text-muted)",
-            marginBottom: "12px",
-          }}
-        >
+        <p style={{ fontSize: "13px", fontWeight: 600, color: "var(--text-muted)", marginBottom: "12px" }}>
           Por dificultad
         </p>
         <div style={{ height: "300px" }}>

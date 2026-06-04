@@ -44,7 +44,11 @@ const FormularioGenerarIA = () => {
       setResult(data.receta);
       toast.success("Receta generada y guardada correctamente");
     } catch (err) {
-      toast.error(err.response?.data?.message ?? "Error al generar la receta");
+      const mensaje =
+        err.response?.data?.message ||
+        err.response?.data?.error ||
+        "Error al generar la receta";
+      toast.error(mensaje);
     } finally {
       setLoading(false);
     }
