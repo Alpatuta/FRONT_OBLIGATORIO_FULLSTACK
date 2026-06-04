@@ -1763,3 +1763,69 @@ h3 {
     grid-template-columns: 1fr;
   }
 }
+
+/* ═══════════════════════════════════════════════════
+   TOASTIFY OVERRIDES
+═══════════════════════════════════════════════════ */
+
+.Toastify__toast {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  font-size: 13.5px;
+  font-family: inherit;
+  padding: 14px 16px;
+  min-height: unset;
+}
+
+.Toastify__toast--success {
+  border-left: 3px solid var(--primary);
+}
+.Toastify__toast--error {
+  border-left: 3px solid var(--red);
+}
+.Toastify__toast--warning {
+  border-left: 3px solid var(--amber);
+}
+.Toastify__toast--info {
+  border-left: 3px solid var(--blue);
+}
+
+.Toastify__toast-icon svg {
+  fill: none;
+}
+.Toastify__toast--success .Toastify__toast-icon svg {
+  color: var(--primary);
+}
+.Toastify__toast--error .Toastify__toast-icon svg {
+  color: var(--red);
+}
+.Toastify__toast--warning .Toastify__toast-icon svg {
+  color: var(--amber);
+}
+.Toastify__toast--info .Toastify__toast-icon svg {
+  color: var(--blue);
+}
+
+.Toastify__progress-bar--success {
+  background: var(--primary);
+}
+.Toastify__progress-bar--error {
+  background: var(--red);
+}
+.Toastify__progress-bar--warning {
+  background: var(--amber);
+}
+.Toastify__progress-bar--info {
+  background: var(--blue);
+}
+
+.Toastify__close-button {
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+.Toastify__close-button:hover {
+  opacity: 1;
+}
