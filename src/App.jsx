@@ -1,12 +1,14 @@
-import { useState } from "react";
 import "./styles.css";
+import "react-toastify/dist/ReactToastify.css";
 import LoginPage from "./pages/LoginPage";
 import RegistroPage from "./pages/RegistroPage";
 import DashboardPage from "./pages/DashboardPage";
-import { BrowserRouter, Routes, Route } from "react-router";
+import ProtectedRoute from "./components/ProtectedRoute";
 import ContainerPage from "./pages/ContainerPage";
+import NotFoundPage from "./pages/NotFoundPage";
+import { useState } from "react";
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { BrowserRouter, Routes, Route } from "react-router";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
 
@@ -20,8 +22,16 @@ function App() {
           <Route path="/" element={<ContainerPage />}>
             <Route path="/" element={<LoginPage />} />
             <Route path="registro" element={<RegistroPage />} />
-            <Route path="dashboard" element={<DashboardPage />} />
+            <Route
+              path="dashboard"
+              element={
+                <ProtectedRoute>
+                  <DashboardPage />
+                </ProtectedRoute>
+              }
+            />
           </Route>
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>
       <ToastContainer
