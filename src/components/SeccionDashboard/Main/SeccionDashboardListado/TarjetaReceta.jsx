@@ -1,4 +1,5 @@
 import { useState } from "react";
+import ModalDetalleReceta from "./ModalDetalleReceta";
 
 const DIFF_BADGE = {
   Fácil: "badge-green",
@@ -8,6 +9,7 @@ const DIFF_BADGE = {
 
 const TarjetaReceta = ({ receta, onDelete, onEdit, esPropia }) => {
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [showDetalle, setShowDetalle] = useState(false);
 
   const thumb = receta.imagen ? (
     <img
@@ -25,10 +27,11 @@ const TarjetaReceta = ({ receta, onDelete, onEdit, esPropia }) => {
   );
 
   return (
-    <article className="recipe-row">
-      <div className="recipe-thumb" aria-hidden="true">
-        {thumb}
-      </div>
+    <>
+      <article className="recipe-row">
+        <div className="recipe-thumb" aria-hidden="true">
+          {thumb}
+        </div>
 
       <div className="recipe-info">
         <strong>{receta.titulo}</strong>
@@ -48,6 +51,39 @@ const TarjetaReceta = ({ receta, onDelete, onEdit, esPropia }) => {
       </div>
 
       <div className="row-actions">
+        <button
+          type="button"
+          onClick={() => setShowDetalle(true)}
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "6px",
+            padding: "6px 12px",
+            fontSize: "13px",
+            fontWeight: 500,
+            color: "var(--primary, #16a34a)",
+            background: "transparent",
+            border: "1.5px solid var(--primary, #16a34a)",
+            borderRadius: "var(--r)",
+            cursor: "pointer",
+            transition: "background 0.15s, color 0.15s",
+          }}
+          onMouseEnter={e => {
+            e.currentTarget.style.background = "var(--primary, #16a34a)";
+            e.currentTarget.style.color = "#fff";
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.background = "transparent";
+            e.currentTarget.style.color = "var(--primary, #16a34a)";
+          }}
+        >
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+          </svg>
+          Detalle
+        </button>
         {esPropia && (
           <button
             className="btn btn-outline btn-sm"
@@ -115,6 +151,14 @@ const TarjetaReceta = ({ receta, onDelete, onEdit, esPropia }) => {
         )}
       </div>
     </article>
+
+    {showDetalle && (
+      <ModalDetalleReceta
+        receta={receta}
+        onClose={() => setShowDetalle(false)}
+      />
+    )}
+    </>
   );
 };
 
