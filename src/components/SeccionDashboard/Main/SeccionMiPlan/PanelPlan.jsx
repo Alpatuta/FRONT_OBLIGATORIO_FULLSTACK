@@ -232,6 +232,134 @@ const PanelPlan = () => {
           ))}
         </div>
       </div>
+
+      {/* Gestión de usuarios — solo admin */}
+      {esAdmin && (
+        <div className="card" style={{ marginTop: "0" }}>
+          <div className="section-header">
+            <div>
+              <div className="card-title">Gestión de usuarios</div>
+              <div className="card-subtitle">
+                {loadingUsuarios
+                  ? "Cargando…"
+                  : `${usuariosFiltrados.length} usuario${usuariosFiltrados.length !== 1 ? "s" : ""}`}
+              </div>
+
+              {/* Toggle igual al de recetas */}
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  marginTop: "8px",
+                }}
+              >
+                <span style={{ fontSize: "13px", color: "var(--text-muted)" }}>
+                  Todos
+                </span>
+                <div
+                  onClick={() => setSoloPlusFiltro(!soloPlusFiltro)}
+                  style={{
+                    width: "44px",
+                    height: "24px",
+                    borderRadius: "999px",
+                    background: soloPlusFiltro
+                      ? "var(--primary, #16a34a)"
+                      : "#cbd5e1",
+                    position: "relative",
+                    cursor: "pointer",
+                    transition: "background 0.2s ease",
+                    flexShrink: 0,
+                  }}
+                >
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "3px",
+                      left: soloPlusFiltro ? "23px" : "3px",
+                      width: "18px",
+                      height: "18px",
+                      borderRadius: "50%",
+                      background: "white",
+                      boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
+                      transition: "left 0.2s ease",
+                    }}
+                  />
+                </div>
+                <span style={{ fontSize: "13px", color: "var(--text-muted)" }}>
+                  Solo Plus
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {loadingUsuarios ? (
+            <div style={{ padding: "16px", color: "var(--text-muted)" }}>
+              Cargando usuarios…
+            </div>
+          ) : usuariosFiltrados.length === 0 ? (
+            <div style={{ padding: "16px", color: "var(--text-muted)" }}>
+              No hay usuarios para mostrar
+            </div>
+          ) : (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "8px",
+                marginTop: "16px",
+              }}
+            >
+              {usuariosFiltrados.map((u) => (
+                <div
+                  key={u._id}
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    padding: "12px 16px",
+                    background: "var(--surface-2)",
+                    borderRadius: "var(--r-md)",
+                  }}
+                >
+                  <div>
+                    <div style={{ fontWeight: 600, fontSize: "14px" }}>
+                      {u.nombre}
+                    </div>
+                    <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>
+                      {u.correo}
+                    </div>
+                  </div>
+                  <div
+                    style={{ display: "flex", alignItems: "center", gap: "12px" }}
+                  >
+                    <span
+                      className={`badge ${u.plan === "premium" ? "badge-green" : "badge-amber"}`}
+                    >
+                      {u.plan}
+                    </span>
+                    <button
+                      className="btn btn-primary"
+                      style={{ fontSize: "12px", padding: "6px 12px" }}
+                      type="button"
+                      disabled={u.plan === "premium" || cambiando === u._id}
+                      onClick={() => handleCambiarPlanUsuario(u.correo, u._id)}
+                    >
+                      {cambiando === u._id ? (
+                        <>
+                          <span className="spinner" /> Procesando…
+                        </>
+                      ) : (
+                        "→ Premium"
+                      )}
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </>
   );
 };
