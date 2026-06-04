@@ -20,7 +20,7 @@ const SeccionMain = () => {
 
   useEffect(() => {
     const headers = { Authorization: `Bearer ${token}` };
-    Promise.all([
+    Promise.allSettled([
       api.get("/recetas", { headers, params: { autor: user?.correo } }),
       api.get("/categorias", { headers }),
       api.get("/reviews/usuario/me", { headers }),
