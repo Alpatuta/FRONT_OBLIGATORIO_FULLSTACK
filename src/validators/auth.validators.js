@@ -43,11 +43,8 @@ export const loginSchema = joi.object({
         'string.email': 'El correo debe tener un formato válido',
         'any.required': 'El correo es obligatorio',
     }),
-    contrasenia: joi.string().min(6).max(100).pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/).required().messages({
+    contrasenia: joi.string().required().messages({
         'string.empty': 'La contraseña no puede estar vacía',
-        'string.min': 'La contraseña debe tener al menos 6 caracteres',
-        'string.max': 'La contraseña no puede tener más de 100 caracteres',
-        'string.pattern.base': 'La contraseña debe contener al menos una letra mayúscula, una letra minúscula y un número',
         'any.required': 'La contraseña es obligatoria',
     }),
 });

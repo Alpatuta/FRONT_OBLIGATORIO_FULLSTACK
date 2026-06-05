@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
@@ -10,6 +10,11 @@ import CampoImagenFile from "../../../ui/CampoImagenFile";
 const FormularioEditarReceta = ({ receta, onCancelEdit, onSaved }) => {
   const token = useSelector((state) => state.auth.token);
   const [loading, setLoading] = useState(false);
+
+  const formRef = useRef(null);
+  useEffect(() => {
+    formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, []);
 
   const {
     register,
@@ -66,7 +71,9 @@ const FormularioEditarReceta = ({ receta, onCancelEdit, onSaved }) => {
       const rawError = err.response?.data?.error;
       const mensaje =
         err.response?.data?.message ||
-        (Array.isArray(rawError) ? rawError.map((e) => e.message).join(", ") : rawError) ||
+        (Array.isArray(rawError)
+          ? rawError.map((e) => e.message).join(", ")
+          : rawError) ||
         "Error desconocido";
       toast.error(`Error al actualizar la receta: ${mensaje}`);
     } finally {
@@ -75,7 +82,7 @@ const FormularioEditarReceta = ({ receta, onCancelEdit, onSaved }) => {
   };
 
   return (
-    <div className="card" style={{ marginTop: "16px" }}>
+    <div className="card" style={{ marginTop: "16px" }} ref={formRef}>
       <div className="card-header">
         <div>
           <div className="card-title">Editar receta</div>

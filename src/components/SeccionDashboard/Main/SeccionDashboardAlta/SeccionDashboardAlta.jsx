@@ -27,10 +27,10 @@ const SeccionDashboardAlta = () => {
       params: { autor: user.correo },
     });
     // Usamos Promise.all para esperar a que ambas peticiones terminen antes de actualizar el estado
-    Promise.all([obtenerCategorias, obtenerCantidadRecetas])
+    Promise.allSettled([obtenerCategorias, obtenerCantidadRecetas])
       .then(([categoriasResponse, cantidadResponse]) => {
-        setCategorias(categoriasResponse.data.categorias);
-        setCantidadRecetas(cantidadResponse.data.recetas.length);
+        setCategorias(categoriasResponse.value.data.categorias);
+        setCantidadRecetas(cantidadResponse.value.data.recetas.length);
       })
       .catch((error) => {
         const mensaje =
@@ -48,6 +48,8 @@ const SeccionDashboardAlta = () => {
         categorias={categorias}
         loadingCategorias={loadingCategorias}
         onRecetaCreada={fetchCantidadRecetas}
+        cantidadRecetas={cantidadRecetas}
+        plan={user?.plan}
       />
       <PanelUso cantidadRecetas={cantidadRecetas} plan={user?.plan} />
     </div>

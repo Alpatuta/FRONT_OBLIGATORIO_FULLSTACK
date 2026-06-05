@@ -1,7 +1,13 @@
 import FormularioAltaReceta from "./FormularioAltaReceta";
 import HeaderPanel from "./HeaderPanel";
 
-const Panel = ({ categorias, loadingCategorias, onRecetaCreada }) => {
+const Panel = ({
+  categorias,
+  loadingCategorias,
+  onRecetaCreada,
+  cantidadRecetas,
+  plan,
+}) => {
   return (
     <article className="card">
       <HeaderPanel />
@@ -10,6 +16,8 @@ const Panel = ({ categorias, loadingCategorias, onRecetaCreada }) => {
         categorias={categorias}
         loadingCategorias={loadingCategorias}
         onRecetaCreada={onRecetaCreada}
+        cantidadRecetas={cantidadRecetas}
+        plan={plan}
       />
     </article>
   );

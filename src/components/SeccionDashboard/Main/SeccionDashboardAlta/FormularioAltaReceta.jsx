@@ -11,9 +11,14 @@ const FormularioAltaReceta = ({
   categorias,
   loadingCategorias,
   onRecetaCreada,
+  cantidadRecetas,
+  plan,
 }) => {
   const token = useSelector((state) => state.auth.token);
   const [loading, setLoading] = useState(false);
+
+  const esPremium = plan === "premium";
+  const limiteAlcanzado = esPremium || cantidadRecetas >= 4;
 
   const {
     register,
@@ -62,7 +67,9 @@ const FormularioAltaReceta = ({
       const rawError = error.response?.data?.error;
       const mensaje =
         error.response?.data?.message ||
-        (Array.isArray(rawError) ? rawError.map((e) => e.message).join(", ") : rawError) ||
+        (Array.isArray(rawError)
+          ? rawError.map((e) => e.message).join(", ")
+          : rawError) ||
         "Error desconocido";
       toast.error(`Error al crear la receta: ${mensaje}`);
     } finally {
@@ -170,14 +177,21 @@ const FormularioAltaReceta = ({
         <span className="field-hint">Escribí un paso por línea</span>
       </div>
 
-      <button
-        className="btn btn-primary btn-lg btn-full span-2"
-        type="submit"
-        disabled={loading}
-      >
-        {loading ? <span className="spinner" /> : null}
-        {loading ? "Guardando…" : "Guardar receta"}
-      </button>
+      {limiteAlcanzado ? (
+        <div className="alert alert-warning span-2">
+          Alcanzaste el límite de 4 recetas del plan Plus. Cambiá a Premium para
+          agregar más.
+        </div>
+      ) : (
+        <button
+          className="btn btn-primary btn-lg btn-full span-2"
+          type="submit"
+          disabled={loading}
+        >
+          {loading ? <span className="spinner" /> : null}
+          {loading ? "Guardando…" : "Guardar receta"}
+        </button>
+      )}
     </form>
   );
 };
