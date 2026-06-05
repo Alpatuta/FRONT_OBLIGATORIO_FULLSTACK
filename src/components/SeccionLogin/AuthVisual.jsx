@@ -1,4 +1,37 @@
+import { useEffect, useState } from "react";
 import BadgeGemini from "../ui/BadgeGemini";
+
+const AnimatedStat = ({ value }) => {
+  const str = String(value);
+  const match = str.match(/^([^\d]*)(\d+)([^\d]*)$/);
+  const target = match ? parseInt(match[2], 10) : null;
+  const [count, setCount] = useState(target !== null ? 0 : null);
+
+  useEffect(() => {
+    if (target === null || target === 0) return;
+    const timer = setTimeout(() => {
+      const duration = 800;
+      const start = performance.now();
+      let rafId;
+      const animate = (now) => {
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        setCount(Math.floor(eased * target));
+        if (progress < 1) {
+          rafId = requestAnimationFrame(animate);
+        } else {
+          setCount(target);
+        }
+      };
+      rafId = requestAnimationFrame(animate);
+      return () => cancelAnimationFrame(rafId);
+    }, 550);
+    return () => clearTimeout(timer);
+  }, [target]);
+
+  if (target === null) return <>{value}</>;
+  return <>{match[1]}{count}{match[3]}</>;
+};
 
 const AuthVisual = () => {
   return (
@@ -36,7 +69,7 @@ const AuthVisual = () => {
             <span>Generación y adaptación automática</span>
           </div>
           <div className="visual-stat">
-            <strong>4+</strong>
+            <strong><AnimatedStat value="4+" /></strong>
             <span>Recetas disponibles en plan plus</span>
           </div>
           <div className="visual-stat">
@@ -44,7 +77,7 @@ const AuthVisual = () => {
             <span>Recetas ilimitadas en premium</span>
           </div>
           <div className="visual-stat">
-            <strong>+33</strong>
+            <strong><AnimatedStat value="+33" /></strong>
             <span>Tipos de adaptación disponibles</span>
           </div>
         </div>
