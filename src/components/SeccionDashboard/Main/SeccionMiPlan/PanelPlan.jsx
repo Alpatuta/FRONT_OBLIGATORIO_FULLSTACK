@@ -157,28 +157,6 @@ const PanelPlan = () => {
                 className="usage-ring"
                 style={{ width: "90px", height: "90px" }}
               >
-                <svg viewBox="0 0 120 120">
-                  <circle className="usage-ring-bg" cx="60" cy="60" r="54" />
-                  <circle
-                    className="usage-ring-fill"
-                    cx="60"
-                    cy="60"
-                    r="54"
-                    strokeDasharray={CIRCUMFERENCE}
-                    strokeDashoffset={offset}
-                  />
-                </svg>
-                <div className="usage-ring-text">
-                  <div
-                    style={{
-                      fontSize: "16px",
-                      fontWeight: 800,
-                      color: "var(--text)",
-                    }}
-                  >
-                    {esPremium ? "∞" : `${pct}%`}
-                  </div>
-                </div>
               </div>
               <div
                 style={{
@@ -187,7 +165,6 @@ const PanelPlan = () => {
                   marginTop: "4px",
                 }}
               >
-                {esPremium ? `${used} recetas` : `${used}/${total} recetas`}
               </div>
             </div>
           </div>
