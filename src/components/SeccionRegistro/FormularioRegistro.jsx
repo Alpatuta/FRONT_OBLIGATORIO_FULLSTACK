@@ -9,6 +9,8 @@ import { useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 
+const FIELD_NAMES = ["nombre", "correo", "contrasenia", "confirmarContrasenia"];
+
 const FormularioRegistro = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -16,13 +18,25 @@ const FormularioRegistro = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    watch,
+    formState: { errors, isValid, touchedFields },
   } = useForm({
     resolver: joiResolver(registerSchema),
     mode: "onChange",
   });
 
   const dispatch = useDispatch();
+
+  const watchedValues = watch(FIELD_NAMES);
+  const validCount = FIELD_NAMES.filter(
+    (name, i) => watchedValues[i] && !errors[name]
+  ).length;
+  const progress = (validCount / FIELD_NAMES.length) * 100;
+
+  const fieldClass = (name) => {
+    if (!touchedFields[name]) return "field";
+    return errors[name] ? "field field-invalid" : "field field-valid";
+  };
 
   const procesarRegistro = async (data) => {
     setLoading(true);
@@ -60,7 +74,11 @@ const FormularioRegistro = () => {
       className="form form-grid-2"
       onSubmit={handleSubmit(procesarRegistro)}
     >
-      <div className="field">
+      <div className="form-progress span-2">
+        <div className="form-progress-bar" style={{ width: `${progress}%` }} />
+      </div>
+
+      <div className={fieldClass("nombre")}>
         <label htmlFor="reg-nombre">Nombre completo</label>
         <input
           id="reg-nombre"
@@ -75,7 +93,7 @@ const FormularioRegistro = () => {
         )}
       </div>
 
-      <div className="field">
+      <div className={fieldClass("correo")}>
         <label htmlFor="reg-correo">Correo electrónico</label>
         <input
           id="reg-correo"
@@ -90,7 +108,7 @@ const FormularioRegistro = () => {
         )}
       </div>
 
-      <div className="field">
+      <div className={fieldClass("contrasenia")}>
         <label htmlFor="reg-contrasenia">Contraseña</label>
         <input
           id="reg-contrasenia"
@@ -105,7 +123,7 @@ const FormularioRegistro = () => {
         )}
       </div>
 
-      <div className="field">
+      <div className={fieldClass("confirmarContrasenia")}>
         <label htmlFor="reg-confirmar">Repetir contraseña</label>
         <input
           id="reg-confirmar"
