@@ -777,6 +777,23 @@ h3 {
   text-align: left;
   min-height: 0;
   line-height: 1.4;
+  position: relative;
+}
+.nav-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 20%;
+  height: 60%;
+  width: 3px;
+  background: var(--sb-active-text);
+  border-radius: 0 2px 2px 0;
+  transform: scaleY(0);
+  transform-origin: center;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.nav-item.active::before {
+  transform: scaleY(1);
 }
 .nav-item:hover {
   background: var(--sb-hover);
@@ -1161,6 +1178,27 @@ h3 {
   gap: 10px;
   margin-top: 16px;
 }
+
+.recipe-list .recipe-row,
+.entity-list .entity-row {
+  animation: fadeIn 0.28s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+.recipe-list .recipe-row:nth-child(2),
+.entity-list .entity-row:nth-child(2) { animation-delay: 50ms; }
+.recipe-list .recipe-row:nth-child(3),
+.entity-list .entity-row:nth-child(3) { animation-delay: 100ms; }
+.recipe-list .recipe-row:nth-child(4),
+.entity-list .entity-row:nth-child(4) { animation-delay: 150ms; }
+.recipe-list .recipe-row:nth-child(5),
+.entity-list .entity-row:nth-child(5) { animation-delay: 200ms; }
+.recipe-list .recipe-row:nth-child(6),
+.entity-list .entity-row:nth-child(6) { animation-delay: 250ms; }
+.recipe-list .recipe-row:nth-child(7),
+.entity-list .entity-row:nth-child(7) { animation-delay: 300ms; }
+.recipe-list .recipe-row:nth-child(8),
+.entity-list .entity-row:nth-child(8) { animation-delay: 350ms; }
+.recipe-list .recipe-row:nth-child(n+9),
+.entity-list .entity-row:nth-child(n+9) { animation-delay: 400ms; }
 
 .recipe-row {
   display: grid;
@@ -1726,6 +1764,17 @@ h3 {
 }
 .section-animate {
   animation: fadeSlide 0.2s ease both;
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 /* ══════════════════════════════════════════════

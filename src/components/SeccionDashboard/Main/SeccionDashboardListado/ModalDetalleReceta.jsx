@@ -48,6 +48,7 @@ const ModalDetalleReceta = ({ receta, onClose }) => {
           position: "relative",
           boxShadow: "0 20px 60px rgba(0,0,0,0.25)",
           margin: "auto",
+          animation: "modalIn 0.22s cubic-bezier(0.4, 0, 0.2, 1) both",
         }}
       >
         {/* Botón cerrar */}
