@@ -861,6 +861,37 @@ h3 {
   opacity: 0.7;
 }
 
+.btn-hamburger {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r);
+  background: var(--surface);
+  color: var(--text-2);
+  cursor: pointer;
+  transition: var(--t);
+  flex-shrink: 0;
+}
+.btn-hamburger:hover {
+  background: var(--surface-2);
+}
+
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 199;
+  cursor: pointer;
+  animation: fadeIn 0.2s ease;
+}
+.sidebar-backdrop.visible {
+  display: block;
+}
+
 /* ══════════════════════════════════════════════
    MAIN CONTENT
 ══════════════════════════════════════════════ */
@@ -1548,6 +1579,12 @@ h3 {
   color: #4ade80;
 }
 
+.plan-info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
 /* ══════════════════════════════════════════════
    OVERVIEW RESUMEN
 ══════════════════════════════════════════════ */
@@ -1720,8 +1757,21 @@ h3 {
     grid-template-columns: 1fr;
   }
   .sidebar {
-    position: static;
-    height: auto;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 260px;
+    z-index: 200;
+    transform: translateX(-100%);
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .sidebar.sidebar-open {
+    transform: translateX(0);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.3);
+  }
+  .btn-hamburger {
+    display: flex;
   }
   .main-content {
     padding: 20px;
@@ -1776,6 +1826,9 @@ h3 {
   .entity-row {
     grid-template-columns: 1fr;
   }
+  .plan-info-grid {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 /* ═══════════════════════════════════════════════════
@@ -1784,6 +1837,7 @@ h3 {
 
 .Toastify__toast-container {
   width: 380px;
+  max-width: calc(100vw - 32px);
 }
 
 .Toastify__toast {

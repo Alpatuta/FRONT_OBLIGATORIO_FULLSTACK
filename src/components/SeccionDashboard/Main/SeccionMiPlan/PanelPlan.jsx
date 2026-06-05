@@ -248,13 +248,7 @@ const PanelPlan = () => {
             </div>
           </div>
         </div>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap: "16px",
-          }}
-        >
+        <div className="plan-info-grid">
           {[
             {
               label: "Plan actual",
@@ -388,6 +382,8 @@ const PanelPlan = () => {
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
+                    flexWrap: "wrap",
+                    gap: "8px",
                     padding: "12px 16px",
                     background: "var(--surface-2)",
                     borderRadius: "var(--r-md)",

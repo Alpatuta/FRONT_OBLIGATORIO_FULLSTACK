@@ -174,7 +174,12 @@ const NAV_GROUPS = [
 ];
 
 const NavbarSidebar = () => {
-  const { currentSection, setCurrentSection } = useDashboard();
+  const { currentSection, setCurrentSection, closeSidebar } = useDashboard();
+
+  const handleNav = (id) => {
+    setCurrentSection(id);
+    closeSidebar();
+  };
 
   return (
     <nav className="sidebar-nav" aria-label="Navegación principal">
@@ -190,7 +195,7 @@ const NavbarSidebar = () => {
             <button
               key={item.id}
               className={`nav-item${currentSection === item.id ? " active" : ""}`}
-              onClick={() => setCurrentSection(item.id)}
+              onClick={() => handleNav(item.id)}
               type="button"
               aria-current={currentSection === item.id ? "page" : undefined}
             >
