@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import api from "../../../../api/api";
+import BadgeGemini from "../../../ui/BadgeGemini";
 
 const TIPOS_ADAPTACION = [
   { value: "vegan", label: "Vegana" },
@@ -204,7 +205,11 @@ const FormularioAdaptarIA = () => {
             </div>
           </div>
 
-          <div className="alert alert-success" style={{ marginTop: "16px" }}>
+          <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "12px" }}>
+            <BadgeGemini size="md" />
+          </div>
+
+          <div className="alert alert-success" style={{ marginTop: "8px" }}>
             La receta adaptada fue guardada automáticamente en tu colección.
           </div>
 

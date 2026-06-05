@@ -1,3 +1,5 @@
+import BadgeGemini from "../ui/BadgeGemini";
+
 const AuthVisual = () => {
   return (
     <section className="auth-visual" aria-label="Presentación de Recetario IA">
@@ -45,6 +47,10 @@ const AuthVisual = () => {
             <strong>+33</strong>
             <span>Tipos de adaptación disponibles</span>
           </div>
+        </div>
+
+        <div style={{ marginTop: "20px" }}>
+          <BadgeGemini size="md" />
         </div>
       </div>
     </section>

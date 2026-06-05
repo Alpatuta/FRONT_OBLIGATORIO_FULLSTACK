@@ -1,4 +1,5 @@
 import { useDashboard } from "../../../context/DashboardContext";
+import BadgeGemini from "../../ui/BadgeGemini";
 
 const IconHome = () => (
   <svg
@@ -180,6 +181,11 @@ const NavbarSidebar = () => {
       {NAV_GROUPS.map((group) => (
         <div key={group.label} className="nav-group">
           <div className="nav-group-label">{group.label}</div>
+          {group.label === "IA Chef" && (
+            <div style={{ padding: "2px 12px 6px" }}>
+              <BadgeGemini label="Powered by Gemini" size="sm" />
+            </div>
+          )}
           {group.items.map((item) => (
             <button
               key={item.id}
