@@ -3,7 +3,12 @@ const AuthVisual = () => {
     <section className="auth-visual" aria-label="Presentación de Recetario IA">
       <div className="auth-visual-brand">
         <a className="brand" href="/">
-          <span className="brand-mark">R</span>
+          <img
+            src="https://res.cloudinary.com/dfa3ts2kx/image/upload/v1780618820/recetario-ia-favicon-transparente_e3ssoq.svg"
+            alt="Recetario IA"
+            className="brand-mark"
+            style={{ background: "transparent" }}
+          />
           <span style={{ color: "#f1f5f9" }}>Recetario IA</span>
         </a>
       </div>
