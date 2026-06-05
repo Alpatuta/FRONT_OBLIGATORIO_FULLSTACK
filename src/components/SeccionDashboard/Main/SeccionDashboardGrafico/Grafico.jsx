@@ -66,14 +66,7 @@ const doughnutOptions = {
 
 const Grafico = ({ barData, doughnutData }) => {
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 280px",
-        gap: "24px",
-        marginTop: "16px",
-      }}
-    >
+    <div className="charts-grid">
       <div>
         <p style={{ fontSize: "13px", fontWeight: 600, color: "var(--text-muted)", marginBottom: "12px" }}>
           Recetas por categoría

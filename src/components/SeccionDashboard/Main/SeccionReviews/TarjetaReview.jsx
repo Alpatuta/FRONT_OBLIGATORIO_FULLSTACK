@@ -35,8 +35,9 @@ const TarjetaReview = ({ review, onEdit, onDelete }) => {
             fontSize: "13px",
             color: "var(--text-muted)",
             overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
+            display: "-webkit-box",
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: "vertical",
           }}
         >
           {review.comentario}

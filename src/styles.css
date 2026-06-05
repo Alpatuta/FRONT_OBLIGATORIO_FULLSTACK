@@ -1248,6 +1248,13 @@ h3 {
 /* ══════════════════════════════════════════════
    CHART SECTION
 ══════════════════════════════════════════════ */
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 24px;
+  margin-top: 16px;
+}
+
 .chart-container {
   margin-top: 16px;
   height: 300px;
@@ -1826,8 +1833,20 @@ h3 {
   .entity-row {
     grid-template-columns: 1fr;
   }
+  .entity-row-actions {
+    justify-content: flex-end;
+  }
   .plan-info-grid {
     grid-template-columns: 1fr 1fr;
+  }
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+  .profile-pill {
+    display: none;
+  }
+  .filter-select {
+    width: 100%;
   }
 }
 

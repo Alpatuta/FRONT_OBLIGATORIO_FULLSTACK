@@ -140,34 +140,8 @@ const PanelPlan = () => {
         {/* Plan Plus (actual) */}
         <div className="plan-card plan-card-current">
           <div className="plan-badge pb-plus">⭐ Plan Plus</div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "flex-start",
-              gap: "16px",
-            }}
-          >
-            <div>
-              <div className="plan-price">Gratis</div>
-              <div className="plan-period">Plan base por defecto</div>
-            </div>
-            <div style={{ textAlign: "right" }}>
-              <div
-                className="usage-ring"
-                style={{ width: "90px", height: "90px" }}
-              >
-              </div>
-              <div
-                style={{
-                  fontSize: "11px",
-                  color: "var(--text-muted)",
-                  marginTop: "4px",
-                }}
-              >
-              </div>
-            </div>
-          </div>
+          <div className="plan-price">Gratis</div>
+          <div className="plan-period">Plan base por defecto</div>
 
           <ul className="plan-features">
             {FEATURES_PLUS.map((f) => (

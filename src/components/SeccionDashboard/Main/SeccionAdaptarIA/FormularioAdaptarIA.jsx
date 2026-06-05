@@ -136,7 +136,7 @@ const FormularioAdaptarIA = () => {
         </div>
 
         <button
-          className="btn btn-primary btn-lg"
+          className="btn btn-primary btn-lg btn-full"
           type="submit"
           disabled={loading || loadingRecetas}
         >
