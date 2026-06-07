@@ -18,7 +18,7 @@ const FormularioAltaReceta = ({
   const [loading, setLoading] = useState(false);
 
   const esPremium = plan === "premium";
-  const limiteAlcanzado = esPremium || cantidadRecetas >= 4;
+  const limiteAlcanzado = !esPremium && cantidadRecetas >= 4;
 
   const {
     register,
