@@ -1,5 +1,4 @@
 import "./styles.css";
-import "react-toastify/dist/ReactToastify.css";
 import LoginPage from "./pages/LoginPage";
 import RegistroPage from "./pages/RegistroPage";
 import DashboardPage from "./pages/DashboardPage";
@@ -7,7 +6,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import ContainerPage from "./pages/ContainerPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import { useState } from "react";
-import { ToastContainer } from "react-toastify";
+import { Toaster } from "sonner";
 import { BrowserRouter, Routes, Route } from "react-router";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
@@ -34,12 +33,7 @@ function App() {
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>
-      <ToastContainer
-        position="bottom-right"
-        autoClose={4000}
-        hideProgressBar={false}
-        theme="light"
-      />
+      <Toaster position="bottom-right" richColors />
     </Provider>
   );
 }

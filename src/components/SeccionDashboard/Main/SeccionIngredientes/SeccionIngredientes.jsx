@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import HeaderIngredientes from "./HeaderIngredientes";
 import FormularioIngrediente from "./FormularioIngrediente";
 import TarjetaIngrediente from "./TarjetaIngrediente";

@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { loginSchema } from "../../validators/auth.validators";
 import { useDispatch } from "react-redux";
 import { setCredentials } from "../../features/auth/auth.slice";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { useState } from "react";
 import { jwtDecode } from "jwt-decode";
 

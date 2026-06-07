@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { categoriaSchema } from "../../../../validators/categorias.validators";
 import api from "../../../../api/api";
 

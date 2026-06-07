@@ -2,7 +2,7 @@ import { joiResolver } from "@hookform/resolvers/joi";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import api from "../../../../api/api";
 import { crearRecetaFormSchema } from "../../../../validators/recetas.form.validators";
 import CampoImagenFile from "../../../ui/CampoImagenFile";

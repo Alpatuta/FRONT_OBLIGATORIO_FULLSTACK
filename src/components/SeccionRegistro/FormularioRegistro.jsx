@@ -3,7 +3,7 @@ import { joiResolver } from "@hookform/resolvers/joi";
 import { registerSchema } from "../../validators/auth.validators";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { setCredentials } from "../../features/auth/auth.slice";
 import { useState } from "react";
 import { jwtDecode } from "jwt-decode";

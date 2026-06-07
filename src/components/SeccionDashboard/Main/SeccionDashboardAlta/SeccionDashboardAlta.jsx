@@ -3,7 +3,7 @@ import PanelUso from "./PanelUso";
 import api from "../../../../api/api";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 const SeccionDashboardAlta = () => {
   const { token, user } = useSelector((state) => state.auth);

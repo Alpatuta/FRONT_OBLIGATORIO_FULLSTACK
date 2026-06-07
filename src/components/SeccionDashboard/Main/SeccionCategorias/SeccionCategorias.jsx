@@ -1,7 +1,7 @@
 import HeaderCategorias from "./HeaderCategorias";
 import FormularioCategoria from "./FormularioCategoria";
 import TarjetaCategoria from "./TarjetaCategoria";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import api from "../../../../api/api";

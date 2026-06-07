@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import api from "../../../../api/api";
 
 const StarPicker = ({ value, onChange }) => {

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import api from "../../../../api/api";
 import HeaderListado from "./HeaderListado";
 import RecetasListado from "./RecetasListado";
