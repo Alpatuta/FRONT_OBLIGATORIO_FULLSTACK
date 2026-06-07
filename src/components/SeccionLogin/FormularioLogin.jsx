@@ -32,7 +32,7 @@ const FormularioLogin = () => {
         data,
       );
 
-      localStorage.setItem("token", response.data.token);
+      sessionStorage.setItem("token", response.data.token);
 
       const decodedToken = jwtDecode(response.data.token);
       dispatch(

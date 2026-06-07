@@ -17,7 +17,7 @@ const Sidebar = () => {
     : "N";
   const dispatch = useDispatch();
   const cerrarSesion = () => {
-    localStorage.clear();
+    sessionStorage.clear();
 
     dispatch(logout((token = null), (user = null), (isAuthenticated = false)));
   };

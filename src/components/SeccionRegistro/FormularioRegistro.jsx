@@ -29,7 +29,7 @@ const FormularioRegistro = () => {
 
   const watchedValues = watch(FIELD_NAMES);
   const validCount = FIELD_NAMES.filter(
-    (name, i) => watchedValues[i] && !errors[name]
+    (name, i) => watchedValues[i] && !errors[name],
   ).length;
   const progress = (validCount / FIELD_NAMES.length) * 100;
 
@@ -46,7 +46,7 @@ const FormularioRegistro = () => {
         data,
       );
 
-      localStorage.setItem("token", response.data.token);
+      sessionStorage.setItem("token", response.data.token);
       const decodedToken = jwtDecode(response.data.token);
 
       dispatch(
