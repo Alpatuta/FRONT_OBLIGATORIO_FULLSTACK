@@ -6,7 +6,6 @@ import SeccionDashboardGrafico from "./SeccionDashboardGrafico/SeccionDashboardG
 import SeccionGenerarIA from "./SeccionGenerarIA/SeccionGenerarIA";
 import SeccionAdaptarIA from "./SeccionAdaptarIA/SeccionAdaptarIA";
 import SeccionCategorias from "./SeccionCategorias/SeccionCategorias";
-import SeccionIngredientes from "./SeccionIngredientes/SeccionIngredientes";
 import SeccionMiPlan from "./SeccionMiPlan/SeccionMiPlan";
 import SeccionReviews from "./SeccionReviews/SeccionReviews";
 import HeaderMain from "./SeccionMain/HeaderMain";
@@ -37,7 +36,6 @@ const SECTIONS = {
   "generar-ia": <SeccionGenerarIA />,
   "adaptar-receta": <SeccionAdaptarIA />,
   categorias: <SeccionCategorias />,
-  ingredientes: <SeccionIngredientes />,
   estadisticas: <SeccionDashboardGrafico />,
   "mi-plan": <SeccionMiPlan />,
   reviews: <SeccionReviews />,

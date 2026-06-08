@@ -10,4 +10,8 @@ export const crearRecetaFormSchema = crearRecetaSchema.keys({
         "string.empty": "Los pasos son obligatorios",
         "any.required": "Los pasos son obligatorios",
     }),
+    categoria: joi.string().required().messages({
+        "any.required": "La categoría es obligatoria",
+        "string.empty": "La categoría es obligatoria",
+    }),
 });

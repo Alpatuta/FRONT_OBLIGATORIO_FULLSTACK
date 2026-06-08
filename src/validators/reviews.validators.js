@@ -7,6 +7,7 @@ export const crearReviewSchema = joi.object({
         "string.base": "El comentario debe ser una cadena de texto",
         "string.min": "El comentario debe tener al menos 5 caracteres",
         "string.max": "El comentario no debe exceder los 1000 caracteres",
+        "string.empty": "El comentario no puede estar vacío",
         "any.required": "El comentario es obligatorio"
     }),
     calificacion: joi.number().min(1).max(5).required().messages({
@@ -17,6 +18,7 @@ export const crearReviewSchema = joi.object({
     receta: joi.string().pattern(ObjectIdRegex).length(24).required().messages({
         "string.pattern.base": "El ID de la receta debe ser un ObjectId válido",
         "string.length": "El ID de la receta debe tener 24 caracteres",
+        "string.empty": "La receta es obligatoria",
         "any.required": "La receta es obligatoria"
     })
 });

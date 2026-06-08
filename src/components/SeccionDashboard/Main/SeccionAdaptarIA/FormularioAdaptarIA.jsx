@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { toast } from "sonner";
 import api from "../../../../api/api";
 import BadgeGemini from "../../../ui/BadgeGemini";
+import { adaptarRecetaSchema } from "../../../../validators/ai.validators";
 
 const TIPOS_ADAPTACION = [
   { value: "vegan", label: "Vegana" },
@@ -50,6 +51,10 @@ const FormularioAdaptarIA = () => {
   const [loadingRecetas, setLoadingRecetas] = useState(true);
   const [recetaId, setRecetaId] = useState("");
   const [tipo, setTipo] = useState("");
+  const [errors, setErrors] = useState({
+    receta: "",
+    tipo: "",
+  });
 
   useEffect(() => {
     api
@@ -64,18 +69,33 @@ const FormularioAdaptarIA = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!recetaId) return toast.error("Seleccioná una receta");
-    if (!tipo) return toast.error("Seleccioná el tipo de adaptación");
 
+    const data = { receta: recetaId, tipo };
+
+    const { error: validationError } = adaptarRecetaSchema.validate(data, {
+      abortEarly: false,
+    });
+
+    if (validationError) {
+      const newErrors = { receta: "", tipo: "" };
+      validationError.details.forEach((detail) => {
+        const field = detail.path[0];
+        if (field in newErrors) newErrors[field] = detail.message;
+      });
+      setErrors(newErrors);
+      return;
+    }
+
+    setErrors({ receta: "", tipo: "" });
     setLoading(true);
     setResult(null);
     try {
-      const { data } = await api.post(
+      const { data: responseData } = await api.post(
         `/recetas/${recetaId}/adaptar`,
         { tipo },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: { Authorization: `Bearer ${token}` } },
       );
-      setResult(data.receta);
+      setResult(responseData.receta);
       toast.success("Receta adaptada y guardada correctamente");
     } catch (err) {
       const mensaje =
@@ -100,9 +120,11 @@ const FormularioAdaptarIA = () => {
           <select
             id="adaptar-receta"
             value={recetaId}
-            onChange={(e) => setRecetaId(e.target.value)}
+            onChange={(e) => {
+              setRecetaId(e.target.value);
+              setErrors((prev) => ({ ...prev, receta: "" }));
+            }}
             disabled={loadingRecetas}
-            required
           >
             <option value="" disabled>
               {loadingRecetas ? "Cargando…" : "Elegí una receta…"}
@@ -113,6 +135,9 @@ const FormularioAdaptarIA = () => {
               </option>
             ))}
           </select>
+          {errors.receta && (
+            <span className="error">{errors.receta}</span>
+          )}
         </div>
 
         <div className="field">
@@ -120,16 +145,21 @@ const FormularioAdaptarIA = () => {
           <select
             id="adaptar-tipo"
             value={tipo}
-            onChange={(e) => setTipo(e.target.value)}
-            required
+            onChange={(e) => {
+              setTipo(e.target.value);
+              setErrors((prev) => ({ ...prev, tipo: "" }));
+            }}
           >
-            <option value="" disabled>Seleccioná el tipo…</option>
+            <option value="" disabled>
+              Seleccioná el tipo…
+            </option>
             {TIPOS_ADAPTACION.map((t) => (
               <option key={t.value} value={t.value}>
                 {t.label}
               </option>
             ))}
           </select>
+          {errors.tipo && <span className="error">{errors.tipo}</span>}
           <span className="field-hint">
             {TIPOS_ADAPTACION.length} tipos disponibles
           </span>
@@ -184,9 +214,19 @@ const FormularioAdaptarIA = () => {
 
           <div className="ia-result-section">
             <h4>Ingredientes adaptados</h4>
-            <ul style={{ display: "grid", gap: "5px", paddingLeft: "16px", listStyle: "disc" }}>
+            <ul
+              style={{
+                display: "grid",
+                gap: "5px",
+                paddingLeft: "16px",
+                listStyle: "disc",
+              }}
+            >
               {result.ingredientes.map((ing, i) => (
-                <li key={i} style={{ fontSize: "14px", color: "var(--text-2)" }}>
+                <li
+                  key={i}
+                  style={{ fontSize: "14px", color: "var(--text-2)" }}
+                >
                   {ing}
                 </li>
               ))}
@@ -205,7 +245,13 @@ const FormularioAdaptarIA = () => {
             </div>
           </div>
 
-          <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "12px" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              marginTop: "12px",
+            }}
+          >
             <BadgeGemini size="md" />
           </div>
 

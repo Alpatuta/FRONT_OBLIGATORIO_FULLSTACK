@@ -2,6 +2,10 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
 import api from "../../../../api/api";
+import {
+  crearReviewSchema,
+  actualizarReviewSchema,
+} from "../../../../validators/reviews.validators";
 
 const StarPicker = ({ value, onChange }) => {
   const [hovered, setHovered] = useState(0);
@@ -37,7 +41,11 @@ const StarPicker = ({ value, onChange }) => {
 const FormularioReview = ({ editando, onCancelEdit, onSaved, recetas }) => {
   const token = useSelector((s) => s.auth.token);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState({
+    receta: "",
+    calificacion: "",
+    comentario: "",
+  });
   const [saved, setSaved] = useState(false);
   const [calificacion, setCalificacion] = useState(editando?.calificacion ?? 0);
   const [comentario, setComentario] = useState(editando?.comentario ?? "");
@@ -49,27 +57,34 @@ const FormularioReview = ({ editando, onCancelEdit, onSaved, recetas }) => {
     setCalificacion(editando?.calificacion ?? 0);
     setComentario(editando?.comentario ?? "");
     setRecetaId(editando?.receta?._id ?? editando?.receta ?? "");
-    setError("");
+    setErrors({ receta: "", calificacion: "", comentario: "" });
   }, [editando]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
 
-    if (!calificacion) {
-      setError("Seleccioná una calificación.");
-      return;
-    }
-    if (comentario.trim().length < 5) {
-      setError("El comentario debe tener al menos 5 caracteres.");
-      return;
-    }
-    if (!recetaId) {
-      setError("Seleccioná una receta.");
+    const data = editando
+      ? { comentario: comentario.trim(), calificacion }
+      : { comentario: comentario.trim(), calificacion, receta: recetaId };
+
+    const schema = editando ? actualizarReviewSchema : crearReviewSchema;
+    const { error: validationError } = schema.validate(data, {
+      abortEarly: false,
+    });
+
+    if (validationError) {
+      const newErrors = { receta: "", calificacion: "", comentario: "" };
+      validationError.details.forEach((detail) => {
+        const field = detail.path[0];
+        if (field in newErrors) newErrors[field] = detail.message;
+      });
+      setErrors(newErrors);
       return;
     }
 
+    setErrors({ receta: "", calificacion: "", comentario: "" });
     setLoading(true);
+
     try {
       const payload = editando
         ? { comentario: comentario.trim(), calificacion }
@@ -96,8 +111,6 @@ const FormularioReview = ({ editando, onCancelEdit, onSaved, recetas }) => {
         err.response?.data?.message ||
         err.response?.data?.error ||
         "Error desconocido";
-
-      setError(mensaje);
       toast.error(
         "Error al guardar la review: " + (mensaje ?? "Error desconocido"),
       );
@@ -128,8 +141,10 @@ const FormularioReview = ({ editando, onCancelEdit, onSaved, recetas }) => {
           <select
             id="rev-receta"
             value={recetaId}
-            onChange={(e) => setRecetaId(e.target.value)}
-            required
+            onChange={(e) => {
+              setRecetaId(e.target.value);
+              setErrors((prev) => ({ ...prev, receta: "" }));
+            }}
           >
             <option value="">Seleccioná una receta…</option>
             {recetas.map((r) => (
@@ -138,11 +153,18 @@ const FormularioReview = ({ editando, onCancelEdit, onSaved, recetas }) => {
               </option>
             ))}
           </select>
+          {errors.receta && <span className="error">{errors.receta}</span>}
         </div>
 
         <div className="field">
           <label>Calificación</label>
-          <StarPicker value={calificacion} onChange={setCalificacion} />
+          <StarPicker
+            value={calificacion}
+            onChange={(val) => {
+              setCalificacion(val);
+              setErrors((prev) => ({ ...prev, calificacion: "" }));
+            }}
+          />
           {calificacion > 0 && (
             <span
               style={{
@@ -155,6 +177,9 @@ const FormularioReview = ({ editando, onCancelEdit, onSaved, recetas }) => {
               {calificacion} de 5 estrellas
             </span>
           )}
+          {errors.calificacion && (
+            <span className="error">{errors.calificacion}</span>
+          )}
         </div>
 
         <div className="field">
@@ -164,17 +189,20 @@ const FormularioReview = ({ editando, onCancelEdit, onSaved, recetas }) => {
             rows={4}
             placeholder="Contá cómo te resultó la receta, qué cambiarías…"
             value={comentario}
-            onChange={(e) => setComentario(e.target.value)}
-            required
-            minLength={5}
+            onChange={(e) => {
+              setComentario(e.target.value);
+              setErrors((prev) => ({ ...prev, comentario: "" }));
+            }}
             maxLength={1000}
           />
           <span className="field-hint">
             {comentario.length}/1000 caracteres
           </span>
+          {errors.comentario && (
+            <span className="error">{errors.comentario}</span>
+          )}
         </div>
 
-        {error && <div className="alert alert-error">{error}</div>}
         {saved && (
           <div className="alert alert-success">
             Review {editando ? "actualizada" : "publicada"} correctamente.

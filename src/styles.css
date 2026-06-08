@@ -178,8 +178,8 @@ h3 {
   color: var(--text);
 }
 .brand-mark {
-  width: 34px;
-  height: 34px;
+  width: 62px;
+  height: 62px;
   border-radius: var(--r);
   background: var(--sb-bg);
   color: #fff;
@@ -471,10 +471,18 @@ h3 {
 .form-grid-2 .field {
   animation: fadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
-.form-grid-2 .field:nth-child(2) { animation-delay: 0ms; }
-.form-grid-2 .field:nth-child(3) { animation-delay: 70ms; }
-.form-grid-2 .field:nth-child(4) { animation-delay: 140ms; }
-.form-grid-2 .field:nth-child(5) { animation-delay: 210ms; }
+.form-grid-2 .field:nth-child(2) {
+  animation-delay: 0ms;
+}
+.form-grid-2 .field:nth-child(3) {
+  animation-delay: 70ms;
+}
+.form-grid-2 .field:nth-child(4) {
+  animation-delay: 140ms;
+}
+.form-grid-2 .field:nth-child(5) {
+  animation-delay: 210ms;
+}
 .form-grid-2 > .alert {
   animation: fadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) 280ms both;
 }
@@ -745,12 +753,24 @@ h3 {
 .auth-visual-copy > div:last-child {
   animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
-.auth-visual-brand                  { animation-delay: 150ms; }
-.auth-visual-copy .eyebrow          { animation-delay: 260ms; }
-.auth-visual-copy h1                { animation-delay: 340ms; }
-.auth-visual-copy > p:not(.eyebrow) { animation-delay: 420ms; }
-.visual-stats-grid                  { animation-delay: 500ms; }
-.auth-visual-copy > div:last-child  { animation-delay: 580ms; }
+.auth-visual-brand {
+  animation-delay: 150ms;
+}
+.auth-visual-copy .eyebrow {
+  animation-delay: 260ms;
+}
+.auth-visual-copy h1 {
+  animation-delay: 340ms;
+}
+.auth-visual-copy > p:not(.eyebrow) {
+  animation-delay: 420ms;
+}
+.visual-stats-grid {
+  animation-delay: 500ms;
+}
+.auth-visual-copy > div:last-child {
+  animation-delay: 580ms;
+}
 
 /* ══════════════════════════════════════════════
    APP LAYOUT
@@ -1247,21 +1267,37 @@ h3 {
   animation: fadeIn 0.28s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 .recipe-list .recipe-row:nth-child(2),
-.entity-list .entity-row:nth-child(2) { animation-delay: 50ms; }
+.entity-list .entity-row:nth-child(2) {
+  animation-delay: 50ms;
+}
 .recipe-list .recipe-row:nth-child(3),
-.entity-list .entity-row:nth-child(3) { animation-delay: 100ms; }
+.entity-list .entity-row:nth-child(3) {
+  animation-delay: 100ms;
+}
 .recipe-list .recipe-row:nth-child(4),
-.entity-list .entity-row:nth-child(4) { animation-delay: 150ms; }
+.entity-list .entity-row:nth-child(4) {
+  animation-delay: 150ms;
+}
 .recipe-list .recipe-row:nth-child(5),
-.entity-list .entity-row:nth-child(5) { animation-delay: 200ms; }
+.entity-list .entity-row:nth-child(5) {
+  animation-delay: 200ms;
+}
 .recipe-list .recipe-row:nth-child(6),
-.entity-list .entity-row:nth-child(6) { animation-delay: 250ms; }
+.entity-list .entity-row:nth-child(6) {
+  animation-delay: 250ms;
+}
 .recipe-list .recipe-row:nth-child(7),
-.entity-list .entity-row:nth-child(7) { animation-delay: 300ms; }
+.entity-list .entity-row:nth-child(7) {
+  animation-delay: 300ms;
+}
 .recipe-list .recipe-row:nth-child(8),
-.entity-list .entity-row:nth-child(8) { animation-delay: 350ms; }
-.recipe-list .recipe-row:nth-child(n+9),
-.entity-list .entity-row:nth-child(n+9) { animation-delay: 400ms; }
+.entity-list .entity-row:nth-child(8) {
+  animation-delay: 350ms;
+}
+.recipe-list .recipe-row:nth-child(n + 9),
+.entity-list .entity-row:nth-child(n + 9) {
+  animation-delay: 400ms;
+}
 
 .recipe-row {
   display: grid;
@@ -1852,8 +1888,13 @@ h3 {
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(-50%); }
-  50%       { transform: translateY(calc(-50% - 8px)); }
+  0%,
+  100% {
+    transform: translateY(-50%);
+  }
+  50% {
+    transform: translateY(calc(-50% - 8px));
+  }
 }
 
 /* ══════════════════════════════════════════════
@@ -2070,8 +2111,12 @@ h3 {
    GEMINI BADGE
 ══════════════════════════════════════════════ */
 @keyframes gemini-spin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .gemini-badge {

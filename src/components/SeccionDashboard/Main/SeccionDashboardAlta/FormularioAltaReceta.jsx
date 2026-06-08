@@ -88,7 +88,7 @@ const FormularioAltaReceta = ({
           {...register("titulo")}
         />
         {errors.titulo && (
-          <span className="field-error">{errors.titulo.message}</span>
+          <span className="error">{errors.titulo.message}</span>
         )}
       </div>
 
@@ -110,7 +110,7 @@ const FormularioAltaReceta = ({
           ))}
         </select>
         {errors.categoria && (
-          <span className="field-error">{errors.categoria.message}</span>
+          <span className="error">{errors.categoria.message}</span>
         )}
       </div>
 
@@ -123,7 +123,7 @@ const FormularioAltaReceta = ({
           <option value="Difícil">Difícil</option>
         </select>
         {errors.dificultad && (
-          <span className="field-error">{errors.dificultad.message}</span>
+          <span className="error">{errors.dificultad.message}</span>
         )}
       </div>
 
@@ -145,7 +145,7 @@ const FormularioAltaReceta = ({
           {...register("descripcion")}
         />
         {errors.descripcion && (
-          <span className="field-error">{errors.descripcion.message}</span>
+          <span className="error">{errors.descripcion.message}</span>
         )}
       </div>
 
@@ -158,7 +158,7 @@ const FormularioAltaReceta = ({
           {...register("ingredientes")}
         />
         {errors.ingredientes && (
-          <span className="field-error">{errors.ingredientes.message}</span>
+          <span className="error">{errors.ingredientes.message}</span>
         )}
         <span className="field-hint">Escribí un ingrediente por línea</span>
       </div>
@@ -171,9 +171,7 @@ const FormularioAltaReceta = ({
           placeholder="Un paso por línea: Mezclar la harina, Agregar los huevos…"
           {...register("pasos")}
         />
-        {errors.pasos && (
-          <span className="field-error">{errors.pasos.message}</span>
-        )}
+        {errors.pasos && <span className="error">{errors.pasos.message}</span>}
         <span className="field-hint">Escribí un paso por línea</span>
       </div>
 

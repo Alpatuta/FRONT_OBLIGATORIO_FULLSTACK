@@ -86,19 +86,6 @@ const IconTag = () => (
     <line x1="7" y1="7" x2="7.01" y2="7" />
   </svg>
 );
-const IconLeaf = () => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M2 22 16 8" />
-    <path d="M3.6 12.6S2 18 10 20c0-8 6-12 6-12s-8 2-12.4-7.4" />
-  </svg>
-);
 const IconChart = () => (
   <svg
     viewBox="0 0 24 24"
@@ -160,7 +147,6 @@ const NAV_GROUPS = [
     label: "Gestión",
     items: [
       { id: "categorias", label: "Categorías", icon: <IconTag /> },
-      { id: "ingredientes", label: "Ingredientes", icon: <IconLeaf /> },
       { id: "reviews", label: "Reviews", icon: <IconStar /> },
     ],
   },

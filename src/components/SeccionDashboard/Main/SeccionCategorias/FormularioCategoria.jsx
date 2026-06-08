@@ -50,7 +50,9 @@ const FormularioCategoria = ({ editando, onCancelEdit, onSaved }) => {
       if (editando) onCancelEdit();
       setTimeout(() => setSaved(false), 2500);
     } catch (err) {
-      toast.error(err.response?.data?.message ?? "Error al guardar la categoría");
+      toast.error(
+        err.response?.data?.message ?? "Error al guardar la categoría",
+      );
     } finally {
       setLoading(false);
     }
@@ -82,7 +84,7 @@ const FormularioCategoria = ({ editando, onCancelEdit, onSaved }) => {
             {...register("nombre")}
           />
           {errors.nombre && (
-            <span className="field-error">{errors.nombre.message}</span>
+            <span className="error">{errors.nombre.message}</span>
           )}
         </div>
 
@@ -95,7 +97,7 @@ const FormularioCategoria = ({ editando, onCancelEdit, onSaved }) => {
             {...register("descripcion")}
           />
           {errors.descripcion && (
-            <span className="field-error">{errors.descripcion.message}</span>
+            <span className="error">{errors.descripcion.message}</span>
           )}
         </div>
 
@@ -116,7 +118,11 @@ const FormularioCategoria = ({ editando, onCancelEdit, onSaved }) => {
             {editando ? "Actualizar" : "Crear categoría"}
           </button>
           {editando && (
-            <button className="btn btn-ghost" type="button" onClick={onCancelEdit}>
+            <button
+              className="btn btn-ghost"
+              type="button"
+              onClick={onCancelEdit}
+            >
               Cancelar
             </button>
           )}

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
+import { generarYGuardarRecetaIASchema } from "../../../../validators/ai.validators";
 import api from "../../../../api/api";
 import BadgeGemini from "../../../ui/BadgeGemini";
 
@@ -13,6 +14,11 @@ const FormularioGenerarIA = () => {
   const [ingredientes, setIngredientes] = useState("");
   const [dificultad, setDificultad] = useState("");
   const [categoriaId, setCategoriaId] = useState("");
+  const [errors, setErrors] = useState({
+    ingredientes: "",
+    dificultad: "",
+    categoria: "",
+  });
 
   useEffect(() => {
     api
@@ -30,19 +36,36 @@ const FormularioGenerarIA = () => {
       .map((s) => s.trim())
       .filter(Boolean);
 
-    if (ingredientesArray.length === 0) return toast.error("Ingresá al menos un ingrediente");
-    if (!dificultad) return toast.error("Seleccioná una dificultad");
-    if (!categoriaId) return toast.error("Seleccioná una categoría");
+    const data = {
+      ingredientes: ingredientesArray,
+      dificultad,
+      categoria: categoriaId,
+    };
 
+    const { error: validationError } = generarYGuardarRecetaIASchema.validate(data, {
+      abortEarly: false,
+    });
+
+    if (validationError) {
+      const newErrors = { ingredientes: "", dificultad: "", categoria: "" };
+      validationError.details.forEach((detail) => {
+        const field = detail.path[0];
+        if (field in newErrors) newErrors[field] = detail.message;
+      });
+      setErrors(newErrors);
+      return;
+    }
+
+    setErrors({ ingredientes: "", dificultad: "", categoria: "" });
     setLoading(true);
     setResult(null);
     try {
-      const { data } = await api.post(
+      const { data: responseData } = await api.post(
         "/recetas/ia",
         { ingredientes: ingredientesArray, dificultad, categoria: categoriaId },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: { Authorization: `Bearer ${token}` } },
       );
-      setResult(data.receta);
+      setResult(responseData.receta);
       toast.success("Receta generada y guardada correctamente");
     } catch (err) {
       const mensaje =
@@ -65,9 +88,14 @@ const FormularioGenerarIA = () => {
             rows={4}
             placeholder="Ej: espinaca, ricota, huevos, ajo, cebolla…&#10;Un ingrediente por línea o separados por coma"
             value={ingredientes}
-            onChange={(e) => setIngredientes(e.target.value)}
-            required
+            onChange={(e) => {
+              setIngredientes(e.target.value);
+              setErrors((prev) => ({ ...prev, ingredientes: "" }));
+            }}
           />
+          {errors.ingredientes && (
+            <span className="error">{errors.ingredientes}</span>
+          )}
           <span className="field-hint">
             Listá los ingredientes que tenés disponibles
           </span>
@@ -78,14 +106,21 @@ const FormularioGenerarIA = () => {
           <select
             id="ia-dificultad"
             value={dificultad}
-            onChange={(e) => setDificultad(e.target.value)}
-            required
+            onChange={(e) => {
+              setDificultad(e.target.value);
+              setErrors((prev) => ({ ...prev, dificultad: "" }));
+            }}
           >
-            <option value="" disabled>Seleccioná dificultad</option>
+            <option value="" disabled>
+              Seleccioná dificultad
+            </option>
             <option value="Fácil">Fácil</option>
             <option value="Media">Media</option>
             <option value="Difícil">Difícil</option>
           </select>
+          {errors.dificultad && (
+            <span className="error">{errors.dificultad}</span>
+          )}
         </div>
 
         <div className="field">
@@ -93,9 +128,11 @@ const FormularioGenerarIA = () => {
           <select
             id="ia-categoria"
             value={categoriaId}
-            onChange={(e) => setCategoriaId(e.target.value)}
+            onChange={(e) => {
+              setCategoriaId(e.target.value);
+              setErrors((prev) => ({ ...prev, categoria: "" }));
+            }}
             disabled={loadingCategorias}
-            required
           >
             <option value="" disabled>
               {loadingCategorias ? "Cargando…" : "Seleccioná una categoría"}
@@ -106,6 +143,9 @@ const FormularioGenerarIA = () => {
               </option>
             ))}
           </select>
+          {errors.categoria && (
+            <span className="error">{errors.categoria}</span>
+          )}
         </div>
 
         <button
@@ -150,9 +190,19 @@ const FormularioGenerarIA = () => {
 
           <div className="ia-result-section">
             <h4>Ingredientes</h4>
-            <ul style={{ display: "grid", gap: "5px", paddingLeft: "16px", listStyle: "disc" }}>
+            <ul
+              style={{
+                display: "grid",
+                gap: "5px",
+                paddingLeft: "16px",
+                listStyle: "disc",
+              }}
+            >
               {result.ingredientes.map((ing, i) => (
-                <li key={i} style={{ fontSize: "14px", color: "var(--text-2)" }}>
+                <li
+                  key={i}
+                  style={{ fontSize: "14px", color: "var(--text-2)" }}
+                >
                   {ing}
                 </li>
               ))}
@@ -171,7 +221,13 @@ const FormularioGenerarIA = () => {
             </div>
           </div>
 
-          <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "12px" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              marginTop: "12px",
+            }}
+          >
             <BadgeGemini size="md" />
           </div>
 

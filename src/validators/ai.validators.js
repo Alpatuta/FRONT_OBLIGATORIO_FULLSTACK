@@ -10,12 +10,14 @@ export const generarYGuardarRecetaIASchema = joi.object({
     }),
     dificultad: joi.string().valid("Fácil", "Media", "Difícil").required().messages({
         "string.base": "La dificultad debe ser un texto",
+        "string.empty": "La dificultad no puede estar vacía",
         "any.only": "La dificultad debe ser 'Fácil', 'Media' o 'Difícil'",
         "any.required": "La dificultad es obligatoria"
     }),
     categoria: joi.string().pattern(objectIdRegex).required().messages({
         "string.base": "La categoría debe ser un texto",
         "string.pattern.base": "La categoría debe ser un ID válido de MongoDB",
+        "string.empty": "La categoría no puede estar vacía",
         "any.required": "La categoría es obligatoria"
     })
 });
@@ -28,6 +30,12 @@ export const adaptarRecetaSchema = joi.object({
         .messages({
             "string.base": "El tipo debe ser un texto",
             "any.only": "El tipo debe ser uno de los siguientes: vegan, vegetarian, gluten-free, keto, low-carb, paleo, dairy-free, nut-free, low-fat, high-protein, low-sodium, sugar-free, whole30, mediterranean, raw, low-calorie, high-fiber, diabetic-friendly, kid-friendly, quick-and-easy, comfort-food, gourmet, fusion, seasonal, holiday, budget-friendly, slow-cooker, one-pot, grilling, air-fryer, instant-pot, sheet-pan o stir-fry",
-            "any.required": "El tipo es obligatorio"
-        })
+            "any.required": "El tipo es obligatorio",
+            "string.empty": "El tipo no puede estar vacío"
+        }),
+    receta: joi.string().required().messages({
+        "string.base": "La receta debe ser un texto",
+        "string.empty": "La receta no puede estar vacía",
+        "any.required": "La receta es obligatoria"
+    })
 });
