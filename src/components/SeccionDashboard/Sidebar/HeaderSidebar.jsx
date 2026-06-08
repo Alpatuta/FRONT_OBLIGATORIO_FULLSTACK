@@ -3,7 +3,7 @@ const HeaderSidebar = () => {
     <div className="sidebar-header">
       <a className="brand" href="/dashboard">
         <img
-          src="https://res.cloudinary.com/dfa3ts2kx/image/upload/v1780618820/recetario-ia-favicon-transparente_e3ssoq.svg"
+          src="https://res.cloudinary.com/dfa3ts2kx/image/upload/v1780920016/recetario_ia_body_icon_clean_m84obu.svg"
           alt=""
           className="brand-mark"
           style={{ background: "transparent" }}

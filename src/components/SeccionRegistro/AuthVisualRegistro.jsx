@@ -4,7 +4,7 @@ const AuthVisualRegistro = () => {
       <div className="auth-visual-brand">
         <a className="brand" href="/">
           <img
-            src="https://res.cloudinary.com/dfa3ts2kx/image/upload/v1780618820/recetario-ia-favicon-transparente_e3ssoq.svg"
+            src="https://res.cloudinary.com/dfa3ts2kx/image/upload/v1780920016/recetario_ia_body_icon_clean_m84obu.svg"
             alt="Recetario IA"
             className="brand-mark"
             style={{ background: "transparent" }}

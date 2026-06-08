@@ -30,7 +30,13 @@ const AnimatedStat = ({ value }) => {
   }, [target]);
 
   if (target === null) return <>{value}</>;
-  return <>{match[1]}{count}{match[3]}</>;
+  return (
+    <>
+      {match[1]}
+      {count}
+      {match[3]}
+    </>
+  );
 };
 
 const AuthVisual = () => {
@@ -39,7 +45,7 @@ const AuthVisual = () => {
       <div className="auth-visual-brand">
         <a className="brand" href="/">
           <img
-            src="https://res.cloudinary.com/dfa3ts2kx/image/upload/v1780618820/recetario-ia-favicon-transparente_e3ssoq.svg"
+            src="https://res.cloudinary.com/dfa3ts2kx/image/upload/v1780920016/recetario_ia_body_icon_clean_m84obu.svg"
             alt="Recetario IA"
             className="brand-mark"
             style={{ background: "transparent" }}
@@ -69,7 +75,9 @@ const AuthVisual = () => {
             <span>Generación y adaptación automática</span>
           </div>
           <div className="visual-stat">
-            <strong><AnimatedStat value="4+" /></strong>
+            <strong>
+              <AnimatedStat value="4+" />
+            </strong>
             <span>Recetas disponibles en plan plus</span>
           </div>
           <div className="visual-stat">
@@ -77,7 +85,9 @@ const AuthVisual = () => {
             <span>Recetas ilimitadas en premium</span>
           </div>
           <div className="visual-stat">
-            <strong><AnimatedStat value="+33" /></strong>
+            <strong>
+              <AnimatedStat value="+33" />
+            </strong>
             <span>Tipos de adaptación disponibles</span>
           </div>
         </div>
